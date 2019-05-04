@@ -1,20 +1,97 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
+Welcome to {{ title }}!
+<canvas id="myCanvas" width="680px" height="500px">
+</canvas>
+<div><b>Time Remaining: <span id="time"></span></b></div>
+<div><b>Total Score: <span id="scoreBoard"></span></b></div>
+<button onClick="gameStartfunction()" style="width:80px; height: 30px"><b>Start</b></button>
+<script src="./shape.ts"></script>
+<script src="./container.ts"></script>
+
+<script>
+    var canvas = document.getElementById("myCanvas");
+    var rectangleContainer = new RectangleContainer();
+    var circleContainer = new CircleContainer();
+    var recPiece = new Rectangle();
+    var cirPiece = new Circle();
+    var pieces = [recPiece, cirPiece];
+    var containers = [rectangleContainer, circleContainer];
+
+    function myMove(e) {
+        onMouseMovement(e, function (newX, newY) {
+            pieces.forEach(function (p) {
+                p.updateOnDrag(newX, newY)
+            });
+            containers.concat(pieces).forEach(function (c) {
+                c.restoreOnMove(newX, newY)
+            });
+        });
+    }
+
+    function myDown(e) {
+        onMouseMovement(e, function (newX, newY) {
+            pieces.forEach(function (dw) {
+                dw.dragStart(newX, newY)
+            });
+        });
+    }
+
+    function myUp(e) {
+        onMouseMovement(e, function (newX, newY) {
+            containers.forEach(function (c) {
+                c.getScore(newX, newY)
+            });
+        });
+    }
+
+    function onMouseMovement(event, callbackFn) {
+        event.preventDefault();
+
+        var newX = event.pageX - canvas.offsetLeft;
+        var newY = event.pageY - canvas.offsetTop;
+        callbackFn(newX, newY);
+    }
+
+    function startTimer(duration, display) {
+        var start = Date.now();
+        var diff;
+        var minutes;
+        var seconds;
+        var mileSecondFactor = 1000;
+        var secondFactor = 60;
+        var minutesFactor = 60;
+        var clock = setInterval(timer, mileSecondFactor);
+
+        function timer() {
+            diff = duration - (((Date.now() - start) / mileSecondFactor) | 0);
+            minutes = parseInt(diff / minutesFactor);
+            seconds = (diff % secondFactor) | 0;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            display.textContent = minutes + ":" + seconds;
+
+            if (diff <= 0) {
+                clearInterval(clock);
+                canvas.removeEventListener("mousedown", myDown);
+                canvas.removeEventListener("mousemove", myMove);
+                canvas.removeEventListener("mouseup", myUp);
+                pieces.forEach(function (p) {
+                    p.endGame();
+                });
+            }
+        }
+
+        timer();
+    }
+
+    function gameStartfunction() {
+        var oneMinutes = 30;
+        var display = document.querySelector('#time');
+
+        canvas.addEventListener("mousedown", myDown, false);
+        canvas.addEventListener("mousemove", myMove, false);
+        canvas.addEventListener("mouseup", myUp, false);
+        startTimer(oneMinutes, display);
+    }
+
+</script>
