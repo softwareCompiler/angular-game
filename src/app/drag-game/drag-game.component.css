@@ -1,0 +1,8 @@
+body {
+    background-color: lightblue;
+}
+
+p {
+    display: inline-block;
+    width: 35px;
+}

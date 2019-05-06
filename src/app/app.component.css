@@ -1,8 +1,5 @@
-body {
-    background-color: lightblue;
-}
-
-span {
-    display: inline-block;
-    width: 35px;
+h1 {
+  font-size: 1.2em;
+  color: #999;
+  margin-bottom: 0;
 }

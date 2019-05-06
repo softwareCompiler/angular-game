@@ -1,0 +1,38 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center" xmlns="http://www.w3.org/1999/html">
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+
+</div>
+<fa-icon icon="coffee"></fa-icon>
+<form class="row" style="margin-top:100px">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6 ">
+    <h2 class="col-lg-5">Sign in</h2>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="bg-success "><fa-icon icon="user"></fa-icon></span>
+
+      </div>
+      <input type="text" class="form-control margin-bottom" placeholder="Username" required="true" autofocus="true" name="User" #userName>
+
+
+    </div>
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="bg-success "><fa-icon icon="key"></fa-icon></span>
+      </div>
+      <input type="password" class="form-control margin-bottom" placeholder="Password" required="true" name="Password"
+             #password>
+    </div>
+
+    <button id="loginButton" class="btn btn-success " type="submit" name="submit"
+            (click)="login(userName.value, password.value)">Sign in
+    </button>
+  </div>
+  <div class="col-lg-3"></div>
+</form>
+

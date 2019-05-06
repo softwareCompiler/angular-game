@@ -2,29 +2,33 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { DragGameComponent } from './drag-game/drag-game.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faKey } from '@fortawesome/free-solid-svg-icons';
+import { LoginComponent } from './login/login.component';
+import { AppRoutingModule } from './app-routing.module';
+import {DragGameComponent} from './drag-game/drag-game.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    LoginComponent,
     DragGameComponent
   ],
   imports: [
     BrowserModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    AppRoutingModule
 
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
-constructor() {   
+constructor() {
     library.add(faUser);
     library.add(faKey);
   }
