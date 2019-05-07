@@ -11,8 +11,10 @@ export class LoginComponent  {
   title = 'Drag-Game';
 
   public login(user, password) {
+    console.log('ussser', user)
     if (user === 'John' && password === 'abcde') {
-      routers.path = '/drag-game';
+      //routers.path = '/drag-game';
+      window.location.assign('/drag-game');
     } else {
       alert('User name or password wrong');
     }
