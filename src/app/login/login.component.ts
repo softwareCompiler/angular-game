@@ -14,9 +14,6 @@ export class LoginComponent  {
     console.log('ussser', user)
     if (user === 'John' && password === 'abcde') {
       //routers.path = '/drag-game';
-
-      // alert('usewwwwr' + user)
-
       window.location.assign('/drag-game');
     } else {
       alert('User name or password wrong');
