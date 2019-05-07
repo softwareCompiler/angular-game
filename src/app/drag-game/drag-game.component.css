@@ -1,8 +1,4 @@
-body {
-    background-color: lightblue;
-}
-
-p {
-    display: inline-block;
-    width: 35px;
+#myCanvas {
+  border: 1px solid black;
+  background-color: lightgrey;
 }
