@@ -7,6 +7,9 @@ import {Component, ElementRef, ViewChild, OnInit} from '@angular/core';
 })
 export class DragGameComponent implements OnInit {
   @ViewChild('myCanvas') canvasRef: ElementRef;
+  public gameStart() {
+    alert('start!!!');
+  }
   constructor() { }
 
   ngOnInit() {
