@@ -28,7 +28,7 @@ export class DragGameComponent implements OnInit {
       oldY = y;
     }
 
-    setInterval(function () {
+    setInterval(( ) => {
       _draw(oldX, oldY + 1);
     }, 50);
   }
@@ -48,8 +48,8 @@ export class DragGameComponent implements OnInit {
     // ctx.fillStyle = 'blue';
     // ctx.fill();
 
-     let rectangleContainer = new RectangleContainer();
-     let circleContainer = new CircleContainer();
+     const rectangleContainer = new RectangleContainer();
+     const circleContainer = new CircleContainer();
      let recPiece = new Rectangle();
      let cirPiece = new Circle();
      let pieces = [recPiece, cirPiece];
@@ -69,7 +69,7 @@ export class DragGameComponent implements OnInit {
 
       paint(oldX, oldY);
 
-      this.autoDrop = function () {
+      this.autoDrop = () => {
         clearTimer();
         timer = setInterval(function () {
           _draw(oldX, oldY + 1);
