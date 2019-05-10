@@ -8,12 +8,36 @@ import {Component, ElementRef, ViewChild, OnInit} from '@angular/core';
 export class DragGameComponent implements OnInit {
   @ViewChild('myCanvas') canvasRef: ElementRef;
   public gameStart() {
-    alert('start!!!');
+    let width = 60;
+    let height = 60;
+    let color = "red";
+    let defaultX = 55;
+    let defaultY = 75;
+    let oldX = defaultX;
+    let oldY = defaultY;
+    let canvas = document.getElementById('myCanvas');
+    const ctx = this.canvasRef.nativeElement.getContext('2d');
+    function paint(x, y) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, width, height);
+    }
+    paint(oldX, oldY);
+    function _draw(x, y) {
+      ctx.clearRect(oldX, oldY, width, height);
+      paint(x, y);
+      oldY = y;
+    }
+
+    setInterval(function () {
+      _draw(oldX, oldY + 1);
+    }, 50);
   }
+
   constructor() { }
 
   ngOnInit() {
-    let canvas = document.getElementById('myCanvas')
+
+    let canvas = document.getElementById('myCanvas');
     const ctx = this.canvasRef.nativeElement.getContext('2d');
     // ctx.fillStyle = 'red';
     // ctx.fillRect(100, 75, 50, 50);
