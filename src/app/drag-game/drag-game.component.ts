@@ -7,10 +7,11 @@ import {Component, ElementRef, ViewChild, OnInit} from '@angular/core';
 })
 export class DragGameComponent implements OnInit {
   @ViewChild('myCanvas') canvasRef: ElementRef;
+
   public gameStart() {
     const width = 60;
     const height = 60;
-    let color = "red";
+    let color = 'red';
     const defaultX = 55;
     const defaultY = 75;
     let oldX = defaultX;
@@ -36,13 +37,13 @@ export class DragGameComponent implements OnInit {
     //   _draw(oldX, oldY + 1);
     // }, 50);
     let update = (x, y) => {
-        ctx.clearRect(_x, _y, width, height);
-        paint(x, y);
-        _x = x;
-        _y = y;
+      ctx.clearRect(_x, _y, width, height);
+      paint(x, y);
+      _x = x;
+      _y = y;
     };
 
-    function myMove(e){
+    function myMove(e) {
       let mx = e.pageX - canvas.offsetLeft;
       let my = e.pageY - canvas.offsetTop;
 
@@ -52,7 +53,8 @@ export class DragGameComponent implements OnInit {
 
   }
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
 

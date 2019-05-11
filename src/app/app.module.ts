@@ -9,6 +9,8 @@ import { faKey } from '@fortawesome/free-solid-svg-icons';
 import { LoginComponent } from './login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import {DragGameComponent} from './drag-game/drag-game.component';
+import {RectangleService} from './rectangle-game/rectangle.service';
+import { RectangleGameComponent } from './rectangle-game/rectangle-game.component';
 
 
 
@@ -16,7 +18,8 @@ import {DragGameComponent} from './drag-game/drag-game.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    DragGameComponent
+    DragGameComponent,
+    RectangleGameComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +27,7 @@ import {DragGameComponent} from './drag-game/drag-game.component';
     AppRoutingModule
 
   ],
-  providers: [],
+  providers: [RectangleService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
