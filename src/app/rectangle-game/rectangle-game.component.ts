@@ -16,7 +16,7 @@ export class RectangleGameComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.rectangleService.paint(25,35);
   }
+
 
 }

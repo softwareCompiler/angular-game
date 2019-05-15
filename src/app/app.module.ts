@@ -11,6 +11,12 @@ import { AppRoutingModule } from './app-routing.module';
 import {DragGameComponent} from './drag-game/drag-game.component';
 import {RectangleService} from './rectangle-game/rectangle.service';
 import { RectangleGameComponent } from './rectangle-game/rectangle-game.component';
+import { HostComponent } from './host/host.component';
+import { ContainerDirective } from './host/container.directive';
+import { DateInputDirective } from './host/date-input.directive';
+import { CircleContainerComponent } from './circle-container/circle-container.component';
+import { CircontainerDirective } from './circle-container/circontainer.directive';
+
 
 
 
@@ -19,7 +25,12 @@ import { RectangleGameComponent } from './rectangle-game/rectangle-game.componen
     AppComponent,
     LoginComponent,
     DragGameComponent,
-    RectangleGameComponent
+    RectangleGameComponent,
+    HostComponent,
+    ContainerDirective,
+    DateInputDirective,
+    CircleContainerComponent,
+    CircontainerDirective
   ],
   imports: [
     BrowserModule,
