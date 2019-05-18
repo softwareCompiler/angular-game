@@ -4,28 +4,13 @@ import {ElementRef, Injectable, ViewChild} from '@angular/core';
   providedIn: 'root'
 })
 export class RectangleService {
-  @ViewChild('myCanvas') canvasRef: ElementRef;
+
 
   constructor() {
   }
 
 
-  canvas = document.getElementById('myCanvas');
-  ctx = this.canvasRef.nativeElement.getContext('2d');
-  width = 60;
-  height = 60;
-  color = 'red';
-  defaultX = 25;
-  defaultY = 35;
-  oldX = this.defaultX;
-  oldY = this.defaultY;
-  draggable = false;
-  timer = null;
 
-  paint(x, y) {
-    this.ctx.fillStyle = this.color;
-    this.ctx.fillRect(x, y, this.width, this.height);
-  }
   // paint(oldX, oldY);
   // this.autoDrop = () => {
   //   clearTimer();

@@ -17,6 +17,9 @@ import { DateInputDirective } from './host/date-input.directive';
 import { CircleContainerComponent } from './circle-container/circle-container.component';
 import { CircontainerDirective } from './circle-container/circontainer.directive';
 import { RoundContainerDirective } from './directives/round-container.directive';
+import { SquareContainerDirective } from './directives/square-container.directive';
+import { SquareDirective } from './directives/square.directive';
+import { CircleDirective } from './directives/circle.directive';
 
 
 
@@ -32,7 +35,10 @@ import { RoundContainerDirective } from './directives/round-container.directive'
     DateInputDirective,
     CircleContainerComponent,
     CircontainerDirective,
-    RoundContainerDirective
+    RoundContainerDirective,
+    SquareContainerDirective,
+    SquareDirective,
+    CircleDirective
   ],
   imports: [
     BrowserModule,
