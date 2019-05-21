@@ -8,6 +8,9 @@ import {RectangleService} from '../rectangle.service';
 })
 export class RectangleGameComponent implements OnInit {
 
+  public cx = '';
+  public cy = '';
+
   constructor(private rectangleService: RectangleService) {
 
     // rectangleService.paint(25,35);
@@ -16,6 +19,9 @@ export class RectangleGameComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    console.log('cx2:', this.cx);
+    console.log('cy2:', this.cy);
   }
 
 

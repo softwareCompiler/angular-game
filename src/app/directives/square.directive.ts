@@ -1,10 +1,12 @@
-import {Directive, ElementRef, Renderer2} from '@angular/core';
+import {Directive, ElementRef, Renderer2, HostListener, EventEmitter, Output} from '@angular/core';
 
 @Directive({selector: '[square]'})
 export class SquareDirective {
 
   public cx;
   public cy;
+  @Output() public sqPositionX = new EventEmitter();
+  @Output() public sqPositionY = new EventEmitter();
 
 
   constructor(elem: ElementRef, renderer: Renderer2) {
@@ -65,10 +67,12 @@ export class SquareDirective {
       dragStart(newX, newY);
     }
 
-
     function myUp(e) {
       this.cx = e.pageX - canvas.offsetLeft;
       this.cy = e.pageY - canvas.offsetTop;
+      this.sqPositionX.emit(this.cx);
+      this.sqPositionY.emit(this.cy);
+
       console.log('cx:', this.cx);
       console.log('cy:', this.cy);
       // getScore(cx, cy);
