@@ -1,7 +1,11 @@
 import {Directive, ElementRef, Renderer2, HostListener, EventEmitter, Output} from '@angular/core';
+import {MessageService} from '../services/directive-messaging';
 
-@Directive({selector: '[square]'})
+
+@Directive({selector: '[square]', providers: [MessageService]})
 export class SquareDirective {
+
+  private  messageService: MessageService;
 
   public cx;
   public cy;
@@ -9,12 +13,19 @@ export class SquareDirective {
   @Output() public sqPositionY = new EventEmitter();
 
 
-  constructor(elem: ElementRef, renderer: Renderer2) {
+  constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
+    this.messageService = messageService;
+    alert('SquareDirective.messageService ' + this.messageService);
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement
     canvas.addEventListener('mousedown', myDown, false);
     canvas.addEventListener('mousemove', myMove, false);
-    canvas.addEventListener('mouseup', myUp, false);
+    // canvas.addEventListener('mouseup', myUp, false);
+
+    canvas.addEventListener('mouseup', event => {
+      this.messageService.broadcast('SquareMouseUpEvent', 'SquareMouseUpEvent!!!!');
+    }, false);
+
     const width = 60;
     const height = 60;
     let color = 'red';
@@ -70,11 +81,13 @@ export class SquareDirective {
     function myUp(e) {
       this.cx = e.pageX - canvas.offsetLeft;
       this.cy = e.pageY - canvas.offsetTop;
-      this.sqPositionX.emit(this.cx);
-      this.sqPositionY.emit(this.cy);
+      // this.sqPositionX.emit(this.cx);
+      // this.sqPositionY.emit(this.cy);
 
       console.log('cx:', this.cx);
       console.log('cy:', this.cy);
+
+      this.messageService.broadcast('SquareMouseUpEvent', 'SquareMouseUpEvent!!!!');
       // getScore(cx, cy);
     }
   }

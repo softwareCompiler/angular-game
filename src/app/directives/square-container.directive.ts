@@ -1,7 +1,11 @@
 import {Directive, ElementRef, Renderer2, Input} from '@angular/core';
 
+import {MessageService} from '../services/directive-messaging';
+import {Subscription} from 'rxjs';
+
 @Directive({
-  selector: '[squareContainer]'
+  selector: '[squareContainer]',
+  providers: [MessageService]
 })
 export class SquareContainerDirective {
   @Input('squareX') public cx;
@@ -9,8 +13,13 @@ export class SquareContainerDirective {
 
   // public wx = '20px';
   // public wy = '120px';
+  private subscription: Subscription;
+  private messageService: MessageService;
 
-  constructor(elem: ElementRef, renderer: Renderer2) {
+  constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
+    this.subscription = messageService.subscribe('SquareMouseUpEvent', (payload) => {
+      alert('Recevied mouse up event ' + payload);
+    });
 
     const ctx = elem.nativeElement.getContext('2d');
     const x = 200;

@@ -1,11 +1,13 @@
 import {Directive, ElementRef, Renderer2} from '@angular/core';
 
+
 @Directive({
   selector: '[circle]'
 })
 export class CircleDirective {
 
   constructor(elem: ElementRef, renderer: Renderer2) {
+
     const ctx = elem.nativeElement.getContext('2d');
     let randomNumber;
     let radius = 35;
