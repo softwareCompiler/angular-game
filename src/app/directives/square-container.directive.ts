@@ -70,7 +70,7 @@ export class SquareContainerDirective {
     // }
 
       let updateScore = function () {
-        document.getElementById('scoreBoard').innerHTML = outScore;
+        document.getElementById('scoreBoard').innerHTML = '' + outScore;
       };
 
       let getScore = (sx, sy) => {

@@ -47,7 +47,7 @@ export class RoundContainerDirective {
       };
 
       let updateScore = () => {
-        document.getElementById("scoreBoard").innerHTML = outScore;
+        document.getElementById("scoreBoard").innerHTML ='' + outScore;
       }
 
       let getScore = (sx, sy) => {
