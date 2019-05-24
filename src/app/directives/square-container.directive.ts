@@ -8,17 +8,15 @@ import {Subscription} from 'rxjs';
   providers: [MessageService]
 })
 export class SquareContainerDirective {
-  @Input('squareX') public cx;
-  @Input('squareY') public cy;
-
-  // public wx = '20px';
-  // public wy = '120px';
   private subscription: Subscription;
   private messageService: MessageService;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     this.subscription = messageService.subscribe('SquareMouseUpEvent', (payload) => {
-      alert('Recevied mouse up event ' + payload);
+      let sx = payload.cx;
+      let sy = payload.cy;
+      getScore(sx,sy);
+
     });
 
     const ctx = elem.nativeElement.getContext('2d');
@@ -37,8 +35,7 @@ export class SquareContainerDirective {
     const width = 2 * radiusX;
     const height = 3.5 * radiusY;
     let score = 0;
-
-    //this.outScore = 0;
+    let outScore = 0;
     let paint = () => {
       let text = ' ' + score;
       const fontHeight = 30;
@@ -61,12 +58,6 @@ export class SquareContainerDirective {
     }
 
     paint();
-
-    let sqX = this.cx;
-    console.log('sqX:', sqX);
-    let sqY = this.cy;
-    console.log('sqY:', sqY);
-
     //  let getScore = function (sx, sy) {
     //   if (this.isOnScoreBoard(sx, sy) && cirPiece.isActive()) {
     //     score += 1;
@@ -78,6 +69,28 @@ export class SquareContainerDirective {
     //   }
     // }
 
+      let updateScore = function () {
+        document.getElementById('scoreBoard').innerHTML = outScore;
+      };
+
+      let getScore = (sx, sy) => {
+        if (isOnScoreBoard(sx, sy)) {
+          score += 1;
+          ctx.clearRect(x - radiusX, y - radiusY, width, height);
+          paint();
+          outScore = score;
+          updateScore();
+        }
+      }
+    //
+    //   this.restoreOnMove = (sx, sy) => {
+    //     paint();
+    //   }
+    //
+      let isOnScoreBoard = (sx, sy) => {
+        return sx < x + rightBoundaryWidth && sx > x - leftBoundaryWidth &&
+          sy < y + bottomBoundaryHeight && sy > y - topBoundaryHeight;
+      }
   }
 
 }

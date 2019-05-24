@@ -7,7 +7,7 @@ import {filter, map} from 'rxjs/internal/operators';
 
 interface Message {
   type: string;
-  payload: any;
+  payload: {};
 }
 
 type MessageCallback = (payload: any) => void;

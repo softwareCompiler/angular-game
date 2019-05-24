@@ -7,15 +7,14 @@ export class SquareDirective {
 
   private  messageService: MessageService;
 
-  public cx;
-  public cy;
-  @Output() public sqPositionX = new EventEmitter();
-  @Output() public sqPositionY = new EventEmitter();
+  // public cx;
+  // public cy;
+  // @Output() public sqPositionX = new EventEmitter();
+  // @Output() public sqPositionY = new EventEmitter();
 
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     this.messageService = messageService;
-    alert('SquareDirective.messageService ' + this.messageService);
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement
     canvas.addEventListener('mousedown', myDown, false);
@@ -23,7 +22,9 @@ export class SquareDirective {
     // canvas.addEventListener('mouseup', myUp, false);
 
     canvas.addEventListener('mouseup', event => {
-      this.messageService.broadcast('SquareMouseUpEvent', 'SquareMouseUpEvent!!!!');
+      let cx = event.pageX - canvas.offsetLeft;
+      let cy = event.pageY - canvas.offsetTop;
+      this.messageService.broadcast('SquareMouseUpEvent', {cx, cy});
     }, false);
 
     const width = 60;
@@ -77,18 +78,18 @@ export class SquareDirective {
       let newY = e.pageY - canvas.offsetTop;
       dragStart(newX, newY);
     }
+    //
+    // function myUp(e) {
+    //   this.cx = e.pageX - canvas.offsetLeft;
+    //   this.cy = e.pageY - canvas.offsetTop;
+    //   // this.sqPositionX.emit(this.cx);
+    //   // this.sqPositionY.emit(this.cy);
+    //
+    //   console.log('cx:', this.cx);
+    //   console.log('cy:', this.cy);
 
-    function myUp(e) {
-      this.cx = e.pageX - canvas.offsetLeft;
-      this.cy = e.pageY - canvas.offsetTop;
-      // this.sqPositionX.emit(this.cx);
-      // this.sqPositionY.emit(this.cy);
-
-      console.log('cx:', this.cx);
-      console.log('cy:', this.cy);
-
-      this.messageService.broadcast('SquareMouseUpEvent', 'SquareMouseUpEvent!!!!');
+    // this.messageService.broadcast('SquareMouseUpEvent', this.cx);
       // getScore(cx, cy);
-    }
+    // }
   }
 }
