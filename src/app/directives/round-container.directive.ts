@@ -45,7 +45,7 @@ export class RoundContainerDirective {
       let isOnScoreBoard = (sx, sy) => {
         return Math.sqrt((sx - x) * (sx - x) + (sy - y) * (sy - y)) < scoreRadius;
       };
-      
+
       let updateScore = () => {
         document.getElementById("scoreBoard").innerHTML = outScore;
       }
