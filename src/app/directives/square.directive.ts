@@ -1,26 +1,19 @@
-import {Directive, ElementRef, Renderer2, HostListener, EventEmitter, Output} from '@angular/core';
+import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 
-
+// change the select from square to appSquare, following the suggestion from WebStorm.
 @Directive({selector: '[square]', providers: [MessageService]})
 export class SquareDirective {
 
   private  messageService: MessageService;
 
-  // public cx;
-  // public cy;
-  // @Output() public sqPositionX = new EventEmitter();
-  // @Output() public sqPositionY = new EventEmitter();
-
-
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     this.messageService = messageService;
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement
+    // Similar code is present in multiple files. Use a super class to reduce duplication.
     canvas.addEventListener('mousedown', myDown, false);
     canvas.addEventListener('mousemove', myMove, false);
-    // canvas.addEventListener('mouseup', myUp, false);
-
     canvas.addEventListener('mouseup', event => {
       let cx = event.pageX - canvas.offsetLeft;
       let cy = event.pageY - canvas.offsetTop;
@@ -29,6 +22,7 @@ export class SquareDirective {
 
     const width = 60;
     const height = 60;
+    // change let color to const color, following the suggestion from WebStorm.
     let color = 'red';
     const defaultX = 25;
     const defaultY = 35;

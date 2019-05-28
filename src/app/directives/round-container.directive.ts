@@ -6,7 +6,6 @@ import {Subscription} from 'rxjs';
   providers: [MessageService]})
 export class RoundContainerDirective {
   private subscription: Subscription;
-  private messageService: MessageService;
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     this.subscription = messageService.subscribe('CircleMouseUpEvent', (payload) => {
       let sx = payload.cx;
@@ -47,7 +46,7 @@ export class RoundContainerDirective {
       };
 
       let updateScore = () => {
-        document.getElementById("scoreBoard").innerHTML ='' + outScore;
+        document.getElementById('scoreBoard').innerHTML = '' + outScore;
       }
 
       let getScore = (sx, sy) => {

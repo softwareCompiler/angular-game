@@ -4,18 +4,17 @@ import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 
 @Directive({
-  selector: '[squareContainer]',
+  selector: '[appSquareContainer]',
   providers: [MessageService]
 })
 export class SquareContainerDirective {
   private subscription: Subscription;
-  private messageService: MessageService;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     this.subscription = messageService.subscribe('SquareMouseUpEvent', (payload) => {
       let sx = payload.cx;
       let sy = payload.cy;
-      getScore(sx,sy);
+      getScore(sx, sy);
 
     });
 
@@ -37,9 +36,9 @@ export class SquareContainerDirective {
     let score = 0;
     let outScore = 0;
     let paint = () => {
-      let text = ' ' + score;
+      const text = ' ' + score;
       const fontHeight = 30;
-      let color = 'black';
+      const color = 'black';
       const textX = 180;
       const textY = 370;
 
@@ -58,39 +57,25 @@ export class SquareContainerDirective {
     }
 
     paint();
-    //  let getScore = function (sx, sy) {
-    //   if (this.isOnScoreBoard(sx, sy) && cirPiece.isActive()) {
-    //     score += 1;
-    //     cirPiece.onScore();
-    //     ctx.clearRect(x - radius, y - radius, width, height);
-    //     paint();
-    //     this.outScore = score;
-    //     updateScore();
-    //   }
-    // }
 
-      let updateScore = function () {
-        document.getElementById('scoreBoard').innerHTML = '' + outScore;
-      };
+    const updateScore = () => {
+      document.getElementById('scoreBoard').innerHTML = '' + outScore;
+    };
 
-      let getScore = (sx, sy) => {
-        if (isOnScoreBoard(sx, sy)) {
-          score += 1;
-          ctx.clearRect(x - radiusX, y - radiusY, width, height);
-          paint();
-          outScore = score;
-          updateScore();
-        }
+    const getScore = (sx, sy) => {
+      if (isOnScoreBoard(sx, sy)) {
+        score += 1;
+        ctx.clearRect(x - radiusX, y - radiusY, width, height);
+        paint();
+        outScore = score;
+        updateScore();
       }
-    //
-    //   this.restoreOnMove = (sx, sy) => {
-    //     paint();
-    //   }
-    //
-      let isOnScoreBoard = (sx, sy) => {
-        return sx < x + rightBoundaryWidth && sx > x - leftBoundaryWidth &&
-          sy < y + bottomBoundaryHeight && sy > y - topBoundaryHeight;
-      }
+    };
+
+    const isOnScoreBoard = (sx, sy) => {
+      return sx < x + rightBoundaryWidth && sx > x - leftBoundaryWidth &&
+        sy < y + bottomBoundaryHeight && sy > y - topBoundaryHeight;
+    };
   }
 
 }
