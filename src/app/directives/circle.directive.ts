@@ -53,6 +53,10 @@ export class CircleDirective {
         return Math.sqrt((x - oldX) * (x - oldX) + (y - oldY) * (y - oldY)) <= radius;
       }
 
+    let restoreOnMove = (sx, sy) => {
+      paint(oldX, oldY);
+    }
+
       let updateOnDrag =(x, y) => {
         if (draggable) {
           _draw(x, y);
@@ -71,6 +75,7 @@ export class CircleDirective {
       let my = e.pageY - canvas.offsetTop;
 
       updateOnDrag(mx, my);
+      restoreOnMove(mx, my);
     }
 
     function myDown(e) {

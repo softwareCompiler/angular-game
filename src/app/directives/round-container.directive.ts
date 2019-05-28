@@ -8,12 +8,16 @@ export class RoundContainerDirective {
   private subscription: Subscription;
   private messageService: MessageService;
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
+    const ctx = elem.nativeElement.getContext('2d');
+    const canvas = elem.nativeElement
+    //canvas.addEventListener('mousedown', myDown, false);
+    canvas.addEventListener('mousemove', myMove, false);
     this.subscription = messageService.subscribe('CircleMouseUpEvent', (payload) => {
       let sx = payload.cx;
       let sy = payload.cy;
       getScore(sx,sy);
     });
-    const ctx = elem.nativeElement.getContext('2d');
+   // const ctx = elem.nativeElement.getContext('2d');
     const x = 450;
     const y = 370;
     const radius = 50;
@@ -42,12 +46,21 @@ export class RoundContainerDirective {
 
     paint();
 
+    let restoreOnMove = function (sx, sy) {
+      paint();
+    };
+
+    function myMove(e) {
+      let sx = e.pageX - canvas.offsetLeft;
+      let sy = e.pageY - canvas.offsetTop;
+      restoreOnMove(sx, sy);
+    };
       let isOnScoreBoard = (sx, sy) => {
         return Math.sqrt((sx - x) * (sx - x) + (sy - y) * (sy - y)) < scoreRadius;
       };
 
       let updateScore = () => {
-        document.getElementById("scoreBoard").innerHTML ='' + outScore;
+        document.getElementById("scoreBoard").innerHTML = '' + outScore;
       }
 
       let getScore = (sx, sy) => {

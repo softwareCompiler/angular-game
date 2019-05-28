@@ -12,14 +12,19 @@ export class SquareContainerDirective {
   private messageService: MessageService;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
+    const ctx = elem.nativeElement.getContext('2d');
+    const canvas = elem.nativeElement;
+    //canvas.addEventListener('mousedown', myDown, false);
+    canvas.addEventListener('mousemove', myMove, false);
     this.subscription = messageService.subscribe('SquareMouseUpEvent', (payload) => {
       let sx = payload.cx;
       let sy = payload.cy;
       getScore(sx,sy);
+      console.log('isSquareScore3:', isSquareScore);
 
     });
 
-    const ctx = elem.nativeElement.getContext('2d');
+   // const ctx = elem.nativeElement.getContext('2d');
     const x = 200;
     const y = 350;
     const radiusX = 60;
@@ -36,6 +41,7 @@ export class SquareContainerDirective {
     const height = 3.5 * radiusY;
     let score = 0;
     let outScore = 0;
+    let isSquareScore = false;
     let paint = () => {
       let text = ' ' + score;
       const fontHeight = 30;
@@ -69,19 +75,37 @@ export class SquareContainerDirective {
     //   }
     // }
 
+    let restoreOnMove = function (sx, sy) {
+      paint();
+    };
+
+    function myMove(e) {
+      let sx = e.pageX - canvas.offsetLeft;
+      let sy = e.pageY - canvas.offsetTop;
+      restoreOnMove(sx, sy);
+    };
+
       let updateScore = function () {
         document.getElementById('scoreBoard').innerHTML = '' + outScore;
       };
 
       let getScore = (sx, sy) => {
         if (isOnScoreBoard(sx, sy)) {
+          isSquareScore = true;
           score += 1;
           ctx.clearRect(x - radiusX, y - radiusY, width, height);
           paint();
           outScore = score;
           updateScore();
+          // canvas.addEventListener('mouseup', event => {
+          //   this.messageService.broadcast('SquareGetScore', {isSquareScore});
+          // });
+
+          console.log('isSquareScore:', isSquareScore);
+
         }
-      }
+      };
+
     //
     //   this.restoreOnMove = (sx, sy) => {
     //     paint();
