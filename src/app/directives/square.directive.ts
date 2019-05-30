@@ -23,7 +23,6 @@ export class SquareDirective {
     this.subscription = messageService.subscribe('SquareGetScore', (payload) => {
       isScore = payload.isSquareScore;
       onScore();
-      console.log('isScore', isScore);
     });
 
     const width = 60;
