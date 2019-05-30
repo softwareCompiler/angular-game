@@ -1,5 +1,4 @@
-import {Directive, ElementRef, Renderer2, Input} from '@angular/core';
-
+import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 
@@ -12,19 +11,16 @@ export class SquareContainerDirective {
   private messageService: MessageService;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
+    this.messageService = messageService;
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement;
-    //canvas.addEventListener('mousedown', myDown, false);
     canvas.addEventListener('mousemove', myMove, false);
     this.subscription = messageService.subscribe('SquareMouseUpEvent', (payload) => {
-      let sx = payload.cx;
-      let sy = payload.cy;
-      getScore(sx,sy);
+      const sx = payload.cx;
+      const sy = payload.cy;
+      getScore(sx, sy);
       console.log('isSquareScore3:', isSquareScore);
-
     });
-
-   // const ctx = elem.nativeElement.getContext('2d');
     const x = 200;
     const y = 350;
     const radiusX = 60;
@@ -42,10 +38,10 @@ export class SquareContainerDirective {
     let score = 0;
     let outScore = 0;
     let isSquareScore = false;
-    let paint = () => {
-      let text = ' ' + score;
+    const paint = () => {
+      const text = ' ' + score;
       const fontHeight = 30;
-      let color = 'black';
+      const color = 'black';
       const textX = 180;
       const textY = 370;
 
@@ -61,60 +57,41 @@ export class SquareContainerDirective {
       ctx.font = fontHeight + 'px Arial';
       ctx.fillStyle = color;
       ctx.fillText(text, textX, textY);
-    }
+    };
 
     paint();
-    //  let getScore = function (sx, sy) {
-    //   if (this.isOnScoreBoard(sx, sy) && cirPiece.isActive()) {
-    //     score += 1;
-    //     cirPiece.onScore();
-    //     ctx.clearRect(x - radius, y - radius, width, height);
-    //     paint();
-    //     this.outScore = score;
-    //     updateScore();
-    //   }
-    // }
 
-    let restoreOnMove = function (sx, sy) {
+    const restoreOnMove = (sx, sy)=> {
       paint();
     };
 
     function myMove(e) {
-      let sx = e.pageX - canvas.offsetLeft;
-      let sy = e.pageY - canvas.offsetTop;
+      const sx = e.pageX - canvas.offsetLeft;
+      const sy = e.pageY - canvas.offsetTop;
       restoreOnMove(sx, sy);
+    }
+
+    const updateScore = () => {
+      document.getElementById('scoreBoard').innerHTML = '' + outScore;
     };
 
-      let updateScore = function () {
-        document.getElementById('scoreBoard').innerHTML = '' + outScore;
-      };
-
-      let getScore = (sx, sy) => {
-        if (isOnScoreBoard(sx, sy)) {
-          isSquareScore = true;
-          score += 1;
-          ctx.clearRect(x - radiusX, y - radiusY, width, height);
-          paint();
-          outScore = score;
-          updateScore();
-          // canvas.addEventListener('mouseup', event => {
-          //   this.messageService.broadcast('SquareGetScore', {isSquareScore});
-          // });
-
-          console.log('isSquareScore:', isSquareScore);
-
-        }
-      };
-
-    //
-    //   this.restoreOnMove = (sx, sy) => {
-    //     paint();
-    //   }
-    //
-      let isOnScoreBoard = (sx, sy) => {
-        return sx < x + rightBoundaryWidth && sx > x - leftBoundaryWidth &&
-          sy < y + bottomBoundaryHeight && sy > y - topBoundaryHeight;
+    const getScore = (sx, sy) => {
+      if (isOnScoreBoard(sx, sy)) {
+        isSquareScore = true;
+        score += 1;
+        ctx.clearRect(x - radiusX, y - radiusY, width, height);
+        paint();
+        outScore = score;
+        updateScore();
+        this.messageService.broadcast('SquareGetScore', {isSquareScore});
+        console.log('isSquareScore:', isSquareScore);
       }
+    };
+
+    const isOnScoreBoard = (sx, sy) => {
+      return sx < x + rightBoundaryWidth && sx > x - leftBoundaryWidth &&
+        sy < y + bottomBoundaryHeight && sy > y - topBoundaryHeight;
+    };
   }
 
 }

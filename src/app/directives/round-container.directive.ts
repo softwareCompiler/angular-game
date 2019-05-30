@@ -2,36 +2,40 @@ import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 
-@Directive({selector: '[circleContainer]',
-  providers: [MessageService]})
+@Directive({
+  selector: '[circleContainer]',
+  providers: [MessageService]
+})
 export class RoundContainerDirective {
   private subscription: Subscription;
   private messageService: MessageService;
+
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
+    this.messageService = messageService;
     const ctx = elem.nativeElement.getContext('2d');
-    const canvas = elem.nativeElement
-    //canvas.addEventListener('mousedown', myDown, false);
+    const canvas = elem.nativeElement;
     canvas.addEventListener('mousemove', myMove, false);
     this.subscription = messageService.subscribe('CircleMouseUpEvent', (payload) => {
-      let sx = payload.cx;
-      let sy = payload.cy;
-      getScore(sx,sy);
+      const sx = payload.cx;
+      const sy = payload.cy;
+      getScore(sx, sy);
     });
-   // const ctx = elem.nativeElement.getContext('2d');
+
     const x = 450;
     const y = 370;
     const radius = 50;
     const scoreRadius = 10;
-    let width = 2 * radius;
-    let height = 2 * radius;
+    const width = 2 * radius;
+    const height = 2 * radius;
     const startAngle = 0;
-    let endAngle = 2 * Math.PI;
+    const endAngle = 2 * Math.PI;
     let score = 0;
     let outScore = 0;
-    let paint = () => {
-      let text = ' ' + score;
+    let isCircleScore = false;
+    const paint = () => {
+      const text = ' ' + score;
       const fontHeight = 30;
-      let color = 'black';
+      const color = 'black';
       const textX = 435;
       const textY = 370;
       ctx.beginPath();
@@ -42,36 +46,36 @@ export class RoundContainerDirective {
       ctx.font = fontHeight + 'px Arial';
       ctx.fillStyle = color;
       ctx.fillText(text, textX, textY);
-    }
+    };
 
     paint();
 
-    let restoreOnMove = function (sx, sy) {
+    const restoreOnMove = function (sx, sy) {
       paint();
     };
 
     function myMove(e) {
-      let sx = e.pageX - canvas.offsetLeft;
-      let sy = e.pageY - canvas.offsetTop;
+      const sx = e.pageX - canvas.offsetLeft;
+      const sy = e.pageY - canvas.offsetTop;
       restoreOnMove(sx, sy);
+    }
+    const isOnScoreBoard = (sx, sy) => {
+      return Math.sqrt((sx - x) * (sx - x) + (sy - y) * (sy - y)) < scoreRadius;
     };
-      let isOnScoreBoard = (sx, sy) => {
-        return Math.sqrt((sx - x) * (sx - x) + (sy - y) * (sy - y)) < scoreRadius;
-      };
 
-      let updateScore = () => {
-        document.getElementById("scoreBoard").innerHTML = '' + outScore;
+    const updateScore = () => {
+      document.getElementById('scoreBoard').innerHTML = '' + outScore;
+    };
+    const getScore = (sx, sy) => {
+      if (isOnScoreBoard(sx, sy)) {
+        isCircleScore = true;
+        score += 1;
+        ctx.clearRect(x - radius, y - radius, width, height);
+        paint();
+        outScore = score;
+        updateScore();
+        this.messageService.broadcast('CircleGetScore', {isCircleScore});
       }
-
-      let getScore = (sx, sy) => {
-        if (isOnScoreBoard(sx, sy)) {
-          score += 1;
-          ctx.clearRect(x - radius, y - radius, width, height);
-          paint();
-          outScore = score;
-          updateScore();
-        }
-      }
-
+    };
   }
 }
