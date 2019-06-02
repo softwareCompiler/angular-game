@@ -20,6 +20,7 @@ import { RoundContainerDirective } from './directives/round-container.directive'
 import { SquareContainerDirective } from './directives/square-container.directive';
 import { SquareDirective } from './directives/square.directive';
 import { CircleDirective } from './directives/circle.directive';
+// import { Shape } from './directives/shape';
 
 
 
@@ -38,7 +39,8 @@ import { CircleDirective } from './directives/circle.directive';
     RoundContainerDirective,
     SquareContainerDirective,
     SquareDirective,
-    CircleDirective
+    CircleDirective,
+    //Shape
   ],
   imports: [
     BrowserModule,
