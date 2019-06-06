@@ -8,7 +8,7 @@ import {Subscription} from 'rxjs';
 })
 export class SquareContainerDirective {
   private subscription: Subscription;
-
+  private messageService: MessageService;
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
 
     this.messageService = messageService;
