@@ -3,14 +3,14 @@ import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 
 @Directive({
-  selector: '[squareContainer]',
+  selector: '[appSquareContainer]',
   providers: [MessageService]
 })
 export class SquareContainerDirective {
   private subscription: Subscription;
   private messageService: MessageService;
-
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
+
     this.messageService = messageService;
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement;
@@ -40,6 +40,7 @@ export class SquareContainerDirective {
     const width = 2 * radiusX;
     const height = 3.5 * radiusY;
     let score = 0;
+
     let squareScore = 0;
     let circleScore = 0;
     let isSquareScore = false;

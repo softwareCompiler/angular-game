@@ -1,8 +1,7 @@
-import {Directive, ElementRef, Renderer2, HostListener, EventEmitter, Output} from '@angular/core';
+import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Shape} from './shape';
-
 
 @Directive({selector: '[square]', providers: [MessageService, Shape]})
 export class SquareDirective {
@@ -40,7 +39,6 @@ export class SquareDirective {
       ctx.fillStyle = this.color;
       ctx.fillRect(x, y, this.width, this.height);
     },
-
     clear(x, y){
       ctx.clearRect(x, y, this.width, this.height);
     },
