@@ -3,32 +3,18 @@ import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Shape} from './shape';
 
-<<<<<<< HEAD
-// change the select from square to appSquare, following the suggestion from WebStorm.
-@Directive({selector: '[square]', providers: [MessageService]})
-export class SquareDirective {
-
-  private  messageService: MessageService;
-=======
-
 @Directive({selector: '[square]', providers: [MessageService, Shape]})
 export class SquareDirective {
   private subscription: Subscription;
   private messageService: MessageService;
  // private shape: Shape;
 
->>>>>>> 4b426bdfd3e788f0bfc28ce3add035fb6366f1c6
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     this.messageService = messageService;
   //  this.shape = shape;
     const ctx = elem.nativeElement.getContext('2d');
-<<<<<<< HEAD
-    const canvas = elem.nativeElement
-    // Similar code is present in multiple files. Use a super class to reduce duplication.
-=======
     const canvas = elem.nativeElement;
->>>>>>> 4b426bdfd3e788f0bfc28ce3add035fb6366f1c6
     canvas.addEventListener('mousedown', myDown, false);
     canvas.addEventListener('mousemove', myMove, false);
     canvas.addEventListener('mouseup', event => {
@@ -37,39 +23,6 @@ export class SquareDirective {
       this.messageService.broadcast('SquareMouseUpEvent', {cx, cy});
     }, false);
 
-<<<<<<< HEAD
-    const width = 60;
-    const height = 60;
-    // change let color to const color, following the suggestion from WebStorm.
-    let color = 'red';
-    const defaultX = 25;
-    const defaultY = 35;
-    let oldX = defaultX;
-    let oldY = defaultY;
-    let _x = defaultX, _y = defaultY;
-    let draggable = false;
-    let timer = null;
-    let paint = (x, y) => {
-      ctx.fillStyle = color;
-      ctx.fillRect(x, y, width, height);
-    }
-    paint(oldX, oldY);
-    let _draw = (x, y) => {
-      ctx.clearRect(oldX, oldY, width, height);
-      paint(x, y);
-      oldY = y;
-    };
-
-    let onTarget = (x, y) => {
-      return x < oldX + width && x > oldX && y < oldY + height && y > oldY;
-    };
-
-    let dragStart = (x, y) => {
-      if (onTarget(x, y)) {
-        draggable = true;
-      }
-    };
-=======
     this.subscription = messageService.subscribe('SquareGetScore', (payload) => {
       isScore = payload.isSquareScore;
      // onScore();
@@ -86,8 +39,6 @@ export class SquareDirective {
       ctx.fillStyle = this.color;
       ctx.fillRect(x, y, this.width, this.height);
     },
->>>>>>> 4b426bdfd3e788f0bfc28ce3add035fb6366f1c6
-
     clear(x, y){
       ctx.clearRect(x, y, this.width, this.height);
     },

@@ -10,17 +10,11 @@ export class SquareContainerDirective {
   private subscription: Subscription;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
-<<<<<<< HEAD
-    this.subscription = messageService.subscribe('SquareMouseUpEvent', (payload) => {
-      let sx = payload.cx;
-      let sy = payload.cy;
-      getScore(sx, sy);
-=======
+
     this.messageService = messageService;
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement;
     canvas.addEventListener('mousemove', myMove, false);
->>>>>>> 4b426bdfd3e788f0bfc28ce3add035fb6366f1c6
 
     this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
       circleScore = payload.circleScore;
@@ -46,15 +40,11 @@ export class SquareContainerDirective {
     const width = 2 * radiusX;
     const height = 3.5 * radiusY;
     let score = 0;
-<<<<<<< HEAD
-    let outScore = 0;
-    let paint = () => {
-=======
+
     let squareScore = 0;
     let circleScore = 0;
     let isSquareScore = false;
     const paint = () => {
->>>>>>> 4b426bdfd3e788f0bfc28ce3add035fb6366f1c6
       const text = ' ' + score;
       const fontHeight = 30;
       const color = 'black';
@@ -77,19 +67,6 @@ export class SquareContainerDirective {
 
     paint();
 
-<<<<<<< HEAD
-    const updateScore = () => {
-      document.getElementById('scoreBoard').innerHTML = '' + outScore;
-    };
-
-    const getScore = (sx, sy) => {
-      if (isOnScoreBoard(sx, sy)) {
-        score += 1;
-        ctx.clearRect(x - radiusX, y - radiusY, width, height);
-        paint();
-        outScore = score;
-        updateScore();
-=======
     const restoreOnMove = (sx, sy) => {
       paint();
     };
@@ -114,7 +91,6 @@ export class SquareContainerDirective {
         squareScore = score;
         updateScore();
         this.messageService.broadcast('SquareGetScore', {isSquareScore, squareScore});
->>>>>>> 4b426bdfd3e788f0bfc28ce3add035fb6366f1c6
       }
     };
 

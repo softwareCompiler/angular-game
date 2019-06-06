@@ -8,11 +8,8 @@ import {Subscription} from 'rxjs';
 })
 export class RoundContainerDirective {
   private subscription: Subscription;
-<<<<<<< HEAD
-=======
   private messageService: MessageService;
 
->>>>>>> 4b426bdfd3e788f0bfc28ce3add035fb6366f1c6
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     this.messageService = messageService;
     const ctx = elem.nativeElement.getContext('2d');
@@ -63,17 +60,11 @@ export class RoundContainerDirective {
       paint();
     };
 
-<<<<<<< HEAD
-      let updateScore = () => {
-        document.getElementById('scoreBoard').innerHTML = '' + outScore;
-      }
-=======
     function myMove(e) {
       const sx = e.pageX - canvas.offsetLeft;
       const sy = e.pageY - canvas.offsetTop;
       restoreOnMove(sx, sy);
     }
->>>>>>> 4b426bdfd3e788f0bfc28ce3add035fb6366f1c6
 
     const isOnScoreBoard = (sx, sy) => {
       return Math.sqrt((sx - x) * (sx - x) + (sy - y) * (sy - y)) < scoreRadius;
