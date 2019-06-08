@@ -1,8 +1,16 @@
-
 import {Injectable} from '@angular/core';
 
 @Injectable()
 export class Shape {
+  autoDrop: any;
+  updateOnDrag: any;
+  dragStart: any;
+  restoreOnMove: any;
+  onScore: any;
+  isActive: any;
+  endGame: any;
+
+
   constructor(config) {
     const defaultX = config.defaultX;
     const defaultY = config.defaultY;
@@ -10,11 +18,12 @@ export class Shape {
     let oldY = defaultY;
     let draggable = false;
     let timer = null;
-    let isScore = false;
+    // let isScore = false;
+
 
     config.paint(oldX, oldY);
 
-    function autoDrop() {
+    this.autoDrop = function() {
       clearTimer();
       timer = setInterval(function () {
         config.clear(oldX, oldY);
@@ -23,7 +32,7 @@ export class Shape {
       }, 50);
     }
 
-    const updateOnDrag = (x, y) => {
+    this.updateOnDrag  = function(x, y){
       if (draggable) {
         config.clear(oldX, oldY);
         config.paint(x, y);
@@ -32,18 +41,18 @@ export class Shape {
       }
     };
 
-    const dragStart = (x, y) => {
+    this.dragStart = function (x, y) {
       if (config.onTarget(x, y, oldX, oldY)) {
         draggable = true;
       }
-    };
+    }
 
-    const restoreOnMove = (sx, sy) => {
+    this.restoreOnMove = function(sx, sy){
       config.paint(oldX, oldY);
     };
 
-    const onScore = (x, y) => {
-      if (isScore) {
+    this.onScore = function(x, y){
+      // if (isScore) {
         clearTimer();
         draggable = false;
         oldX = defaultX;
@@ -51,18 +60,18 @@ export class Shape {
         config.paint(oldX, oldY);
         const randomNumber = Math.random();
         if (0 <= randomNumber && randomNumber < 0.5) {
-          autoDrop();
-        }
+          this.autoDrop();
+        // }
       }
     };
-    const isActive = () => {
+    this.isActive = function(){
       return draggable;
     };
-    const endGame = () => {
+    this.endGame = function(){
       clearTimer();
     };
 
-    const clearTimer = () => {
+    function clearTimer(){
       if (timer) {
         clearInterval(timer);
         timer = null;

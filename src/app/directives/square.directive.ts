@@ -3,16 +3,17 @@ import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Shape} from './shape';
 
-@Directive({selector: '[square]', providers: [MessageService, Shape]})
+@Directive({selector: '[square]', providers: [MessageService]})
 export class SquareDirective {
   private subscription: Subscription;
   private messageService: MessageService;
- // private shape: Shape;
+
+  // private shape: Shape;
 
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     this.messageService = messageService;
-  //  this.shape = shape;
+    //  this.shape = shape;
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement;
     canvas.addEventListener('mousedown', myDown, false);
@@ -25,39 +26,52 @@ export class SquareDirective {
 
     this.subscription = messageService.subscribe('SquareGetScore', (payload) => {
       isScore = payload.isSquareScore;
-     // onScore();
+      shape.onScore();
     });
 
-    const config = {
+    let config = {
       width: 60,
       height: 60,
       color: 'red',
       defaultX: 25,
       defaultY: 35,
+      paint: {},
+      clear: {},
+      onTarget: {}
+    };
 
-    paint(x, y) {
-      ctx.fillStyle = this.color;
-      ctx.fillRect(x, y, this.width, this.height);
-    },
-    clear(x, y){
-      ctx.clearRect(x, y, this.width, this.height);
-    },
+    config.paint = function (x, y) {
+      ctx.fillStyle = config.color;
+      ctx.fillRect(x, y, config.width, config.height);
+    };
+    config.clear = function (x, y) {
+      ctx.clearRect(x, y, config.width, config.height);
+    };
 
-    onTarget(x, y, oldX, oldY) {
-      return x < oldX + this.width && x > oldX && y < oldY + this.height && y > oldY;
-    },
+    config.onTarget = function (x, y, oldX, oldY) {
+      return x < oldX + config.width && x > oldX && y < oldY + config.height && y > oldY;
+    };
+    //
+    // let oldX = config.defaultX;
+    // let oldY = config.defaultY;
+    //
+    // config.paint(oldX, oldY);
 
-  };
+
     const shape = new Shape(config);
+    console.log('shape:', shape);
 
-    function CloneObject(origianlObj, obj) {
-      for (let key in origianlObj) {
-        obj[key] = origianlObj[key];
-      }
-      return obj;
-    }
+    // function CloneObject(origianlObj, obj) {
+    //   for (let key in origianlObj) {
+    //     obj[key] = origianlObj[key];
+    //   }
+    //   return obj;
+    // }
+    //
+    // CloneObject(shape, this);
+    // console.log('this:', this);
 
-    CloneObject(shape, this);
+
     // const width = 60;
     // const height = 60;
     // const color = 'red';
@@ -119,15 +133,15 @@ export class SquareDirective {
     function myMove(e) {
       const mx = e.pageX - canvas.offsetLeft;
       const my = e.pageY - canvas.offsetTop;
-      this.updateOnDrag(mx, my);
-      this.restoreOnMove(mx, my);
+      shape.updateOnDrag(mx, my);
+      shape.restoreOnMove(mx, my);
     }
 
     function myDown(e) {
       e.preventDefault();
       const newX = e.pageX - canvas.offsetLeft;
       const newY = e.pageY - canvas.offsetTop;
-      this.dragStart(newX, newY);
+      shape.dragStart(newX, newY);
     }
 
     // const endGame = () => {
