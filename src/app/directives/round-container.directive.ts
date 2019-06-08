@@ -1,6 +1,7 @@
 import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
+import {Container} from './container';
 
 @Directive({
   selector: '[circleContainer]',
@@ -26,26 +27,32 @@ export class RoundContainerDirective {
       getScore(sx, sy);
     });
 
-    const x = 450;
-    const y = 370;
+
     const radius = 50;
     const scoreRadius = 10;
-    const width = 2 * radius;
-    const height = 2 * radius;
-    const startAngle = 0;
-    const endAngle = 2 * Math.PI;
-    let score = 0;
     let circleScore = 0;
     let squareScore = 0;
     let isCircleScore = false;
-    const paint = () => {
-      const text = ' ' + score;
+
+    const config = {
+      x: 450,
+      y: 370,
+      width: 2 * radius,
+      height: 2 * radius,
+      startAngle: 0,
+      endAngle: 2 * Math.PI,
+      score: 0,
+      paint: () => {
+      },
+    };
+    config.paint = () => {
+      const text = ' ' + config.score;
       const fontHeight = 30;
       const color = 'black';
       const textX = 435;
       const textY = 370;
       ctx.beginPath();
-      ctx.arc(x, y, radius, startAngle, endAngle);
+      ctx.arc(config.x, config.y, radius, config.startAngle, config.endAngle);
       ctx.lineWidth = 4;
       ctx.strokeStyle = 'orange';
       ctx.stroke();
@@ -54,20 +61,14 @@ export class RoundContainerDirective {
       ctx.fillText(text, textX, textY);
     };
 
-    paint();
-
-    const restoreOnMove = function (sx, sy) {
-      paint();
-    };
-
     function myMove(e) {
       const sx = e.pageX - canvas.offsetLeft;
       const sy = e.pageY - canvas.offsetTop;
-      restoreOnMove(sx, sy);
+      container.restoreOnMove(sx, sy);
     }
 
     const isOnScoreBoard = (sx, sy) => {
-      return Math.sqrt((sx - x) * (sx - x) + (sy - y) * (sy - y)) < scoreRadius;
+      return Math.sqrt((sx - config.x) * (sx - config.x) + (sy - config.y) * (sy - config.y)) < scoreRadius;
     };
 
     const updateScore = () => {
@@ -77,13 +78,14 @@ export class RoundContainerDirective {
     const getScore = (sx, sy) => {
       if (isOnScoreBoard(sx, sy)) {
         isCircleScore = true;
-        score += 1;
-        ctx.clearRect(x - radius, y - radius, width, height);
-        paint();
-        circleScore = score;
+        config.score += 1;
+        ctx.clearRect(config.x - radius, config.y - radius, config.width, config.height);
+        config.paint();
+        circleScore = config.score;
         updateScore();
         this.messageService.broadcast('CircleGetScore', {isCircleScore, circleScore});
       }
     };
+    const container = new Container(config);
   }
 }
