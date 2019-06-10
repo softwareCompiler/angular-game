@@ -19,9 +19,9 @@ export class DragGameComponent implements OnInit {
     let _x = defaultX, _y = defaultY;
     const canvas = document.getElementById('myCanvas');
     const ctx = this.canvasRef.nativeElement.getContext('2d');
-    //canvas.addEventListener('mousedown', myDown, false);
+    // canvas.addEventListener('mousedown', myDown, false);
     canvas.addEventListener('mousemove', myMove, false);
-    //canvas.addEventListener('mouseup', myUp, false);
+    // canvas.addEventListener('mouseup', myUp, false);
     let paint = (x, y) => {
       ctx.fillStyle = color;
       ctx.fillRect(x, y, width, height);

@@ -14,18 +14,15 @@ export class CircleDirective {
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     this.messageService = messageService;
     const ctx = elem.nativeElement.getContext('2d');
-    const canvas = elem.nativeElement
+    const canvas = elem.nativeElement;
     canvas.addEventListener('mousedown', myDown, false);
     canvas.addEventListener('mousemove', myMove, false);
-    canvas.addEventListener('mouseup', event => {
-      const cx = event.pageX - canvas.offsetLeft;
-      const cy = event.pageY - canvas.offsetTop;
-      this.messageService.broadcast('CircleMouseUpEvent', {cx, cy});
-    }, false);
+    canvas.addEventListener('mouseup', myUp, false);
     this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
-      //isScore = payload.isCircleScore;
+      // isScore = payload.isCircleScore;
       shape.onScore();
     });
+    // let isScore = false;
     let randomNumber;
     const radius = 35;
     const startAngle = 0;
@@ -72,6 +69,12 @@ export class CircleDirective {
       const newX = e.pageX - canvas.offsetLeft;
       const newY = e.pageY - canvas.offsetTop;
       shape.dragStart(newX, newY);
+    }
+
+    function myUp(e){
+      const cx = e.pageX - canvas.offsetLeft;
+      const cy = e.pageY - canvas.offsetTop;
+      messageService.broadcast('CircleMouseUpEvent', {cx, cy});
     }
   }
 }
