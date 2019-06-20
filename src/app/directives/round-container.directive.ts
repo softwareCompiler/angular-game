@@ -62,9 +62,9 @@ export class RoundContainerDirective {
     };
 
     function myMove(e) {
-      const sx = e.pageX - canvas.offsetLeft;
-      const sy = e.pageY - canvas.offsetTop;
-      container.restoreOnMove(sx, sy);
+      // const sx = e.pageX - canvas.offsetLeft;
+      // const sy = e.pageY - canvas.offsetTop;
+      container.restoreOnMove();
     }
 
     const isOnScoreBoard = (sx, sy) => {
