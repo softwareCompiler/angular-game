@@ -12,7 +12,10 @@ interface Message {
 
 type MessageCallback = (payload: any) => void;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
+
 export class MessageService {
   private handler = new Subject<Message>();
 
