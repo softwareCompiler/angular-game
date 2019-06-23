@@ -4,26 +4,26 @@ import {Subscription} from 'rxjs';
 import {Shape} from './shape';
 
 
-@Directive({
-  selector: '[circle]', providers: [MessageService]
-})
+@Directive({selector: '[circle]'})
 export class CircleDirective {
   private subscription: Subscription;
   private messageService: MessageService;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     this.messageService = messageService;
+    console.log("CircleDirective messageService", messageService);
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement;
-    canvas.addEventListener('mousedown', myDown, false);
-    canvas.addEventListener('mousemove', myMove, false);
-    canvas.addEventListener('mouseup', myUp, false);
+    // this.messageService.subscribe('GameMessage', (gameStatus) => {
+      canvas.addEventListener('mousedown', myDown, false);
+      canvas.addEventListener('mousemove', myMove, false);
+      canvas.addEventListener('mouseup', myUp, false);
+      console.log("circleMessage", "get it")
+    // });
     this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
-      // isScore = payload.isCircleScore;
       shape.onScore();
     });
-    // let isScore = false;
-    let randomNumber;
+    //let randomNumber;
     const radius = 35;
     const startAngle = 0;
     const endAngle = 2 * Math.PI;

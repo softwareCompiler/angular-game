@@ -16,21 +16,17 @@ export class SquareDirective {
 
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement;
-    const aaa = this.messageService.subscribe('GameMessage', (p) => {
-      console.log('SquareDirective gameMessage;!!!!!');
+    this.messageService.subscribe('GameMessage', (gameStatus) => {
+      canvas.addEventListener('mousedown', myDown, false);
+      canvas.addEventListener('mousemove', myMove, false);
+      canvas.addEventListener('mouseup', myUp, false);
+      console.log("squareMessage", "get it")
     });
-
-    console.log('aaa subscribe ', aaa);
-    canvas.addEventListener('mousedown', myDown, false);
-    canvas.addEventListener('mousemove', myMove, false);
-    canvas.addEventListener('mouseup', myUp, false);
-    // });
     this.subscription = this.messageService.subscribe('SquareGetScore', (payload) => {
-      console.log("99999", payload);
       // isScore = payload.isSquareScore;
       shape.onScore();
     });
-    // let isScore = false;
+
     const config = {
       width: 60,
       height: 60,
