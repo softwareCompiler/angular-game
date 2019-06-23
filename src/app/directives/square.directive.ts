@@ -16,12 +16,19 @@ export class SquareDirective {
 
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement;
-    this.messageService.subscribe('GameMessage', (gameStatus) => {
+    this.messageService.subscribe('GameMessage', (payload) => {
       canvas.addEventListener('mousedown', myDown, false);
       canvas.addEventListener('mousemove', myMove, false);
       canvas.addEventListener('mouseup', myUp, false);
-      console.log("squareMessage", "get it")
+      console.log("GameMessage", payload.gameStart);
     });
+    this.messageService.subscribe('TimeOutMessage', (payload) => {
+      canvas.removeEventListener("mousedown", myDown);
+      canvas.removeEventListener("mousemove", myMove);
+      canvas.removeEventListener("mouseup", myUp);
+      shape.endGame();
+    });
+
     this.subscription = this.messageService.subscribe('SquareGetScore', (payload) => {
       // isScore = payload.isSquareScore;
       shape.onScore();

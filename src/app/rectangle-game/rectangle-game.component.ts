@@ -1,5 +1,6 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
+import {timer} from 'rxjs';
 
 @Component({
   selector: 'app-rectangle-game',
@@ -10,11 +11,14 @@ export class RectangleGameComponent {
   // private messageService: MessageService;
 
   // let gameStatus = true;
+  timer: any;
+  // startTimer: any;
 
   constructor(private messageService: MessageService) {
     console.log('messageService ccc', messageService);
     // this.messageService = messageService;
   }
+   // timer: any;
 
   startTimer = (duration, display) => {
     let start = Date.now();
@@ -24,13 +28,14 @@ export class RectangleGameComponent {
     const mileSecondFactor = 1000;
     const secondFactor = 60;
     const minutesFactor = 60;
-    let clock = setInterval(timer, mileSecondFactor);
+    // let clock = setInterval(timer, mileSecondFactor);
 
     console.log('publish this.messageService 000 ...', this.messageService);
 
     this.messageService.broadcast('GameMessage', {});
 
-    function timer() {
+    const timer = () => {
+      let gameOver = true;
       diff = duration - (((Date.now() - start) / mileSecondFactor) | 0);
       minutes = Math.floor(diff / minutesFactor);
       seconds = (diff % secondFactor) | 0;
@@ -40,23 +45,22 @@ export class RectangleGameComponent {
 
       if (diff <= 0) {
         clearInterval(clock);
-        // When timer expires, we need to broadcast a message.
-        this.messageService.broadcast('TimeOutMessage', {});
+        this.messageService.broadcast('TimeOutMessage', {gameOver});
       }
-    }
+    };
 
     timer();
+    let clock = setInterval(timer, mileSecondFactor);
   }
 
+  // let clock = setInterval(timer, mileSecondFactor);
+
   gameStart = () => {
-    let gameStatus = true;
+    let gameStart = true;
     const oneMinutes = 30;
     const display = document.querySelector('#time');
     this.startTimer(oneMinutes, display);
-    console.log('publish GameMessage ...', {gameStatus});
-    console.log('publish this.messageService ...', this.messageService);
-
-    this.messageService.broadcast('GameMessage', {gameStatus});
+    this.messageService.broadcast('GameMessage', {gameStart});
   }
 
 }
