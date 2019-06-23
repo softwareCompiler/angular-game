@@ -4,16 +4,16 @@ import {MessageService} from '../services/directive-messaging';
 @Component({
   selector: 'app-rectangle-game',
   templateUrl: './rectangle-game.component.html',
-  styleUrls: ['./rectangle-game.component.css'],
-  providers: [MessageService]
+  styleUrls: ['./rectangle-game.component.css']
 })
 export class RectangleGameComponent {
-  private messageService: MessageService;
+  // private messageService: MessageService;
 
   // let gameStatus = true;
 
-  constructor(messageService: MessageService) {
-    this.messageService = messageService;
+  constructor(private messageService: MessageService) {
+    console.log('messageService ccc', messageService);
+    // this.messageService = messageService;
   }
 
   startTimer = (duration, display) => {
@@ -26,7 +26,11 @@ export class RectangleGameComponent {
     const minutesFactor = 60;
     let clock = setInterval(timer, mileSecondFactor);
 
-    function timer(){
+    console.log('publish this.messageService 000 ...', this.messageService);
+
+    this.messageService.broadcast('GameMessage', {});
+
+    function timer() {
       diff = duration - (((Date.now() - start) / mileSecondFactor) | 0);
       minutes = Math.floor(diff / minutesFactor);
       seconds = (diff % secondFactor) | 0;
@@ -36,8 +40,11 @@ export class RectangleGameComponent {
 
       if (diff <= 0) {
         clearInterval(clock);
+        // When timer expires, we need to broadcast a message.
+        this.messageService.broadcast('TimeOutMessage', {});
       }
     }
+
     timer();
   }
 
@@ -46,6 +53,9 @@ export class RectangleGameComponent {
     const oneMinutes = 30;
     const display = document.querySelector('#time');
     this.startTimer(oneMinutes, display);
+    console.log('publish GameMessage ...', {gameStatus});
+    console.log('publish this.messageService ...', this.messageService);
+
     this.messageService.broadcast('GameMessage', {gameStatus});
   }
 

@@ -5,22 +5,28 @@ import {Shape} from './shape';
 // import {RectangleGameComponent} from '../rectangle-game/rectangle-game.component';
 import {mouseEvent} from '../../lib/mouse-event';
 
-@Directive({selector: '[square]', providers: [MessageService]})
+@Directive({selector: '[square]'})
 export class SquareDirective {
   private subscription: Subscription;
   private messageService: MessageService;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     this.messageService = messageService;
+    console.log("SquareDirective messageService", messageService);
+
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement;
-    // this.subscription = messageService.subscribe('GameMessage', (payload) => {
-    //   console.log('gameMessage;', payload);
-      canvas.addEventListener('mousedown', myDown, false);
-      canvas.addEventListener('mousemove', myMove, false);
-      canvas.addEventListener('mouseup', myUp, false);
+    const aaa = this.messageService.subscribe('GameMessage', (p) => {
+      console.log('SquareDirective gameMessage;!!!!!');
+    });
+
+    console.log('aaa subscribe ', aaa);
+    canvas.addEventListener('mousedown', myDown, false);
+    canvas.addEventListener('mousemove', myMove, false);
+    canvas.addEventListener('mouseup', myUp, false);
     // });
-    this.subscription = messageService.subscribe('SquareGetScore', (payload) => {
+    this.subscription = this.messageService.subscribe('SquareGetScore', (payload) => {
+      console.log("99999", payload);
       // isScore = payload.isSquareScore;
       shape.onScore();
     });

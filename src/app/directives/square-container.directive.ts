@@ -4,8 +4,7 @@ import {Subscription} from 'rxjs';
 import {Container} from './container';
 
 @Directive({
-  selector: '[appSquareContainer]',
-  providers: [MessageService]
+  selector: '[appSquareContainer]'
 })
 export class SquareContainerDirective {
   private subscription: Subscription;
@@ -16,7 +15,6 @@ export class SquareContainerDirective {
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement;
     canvas.addEventListener('mousemove', myMove, false);
-
     this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
       circleScore = payload.circleScore;
     });
