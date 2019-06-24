@@ -2,8 +2,6 @@ import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Shape} from './shape';
-// import {RectangleGameComponent} from '../rectangle-game/rectangle-game.component';
-import {mouseEvent} from '../../lib/mouse-event';
 
 @Directive({selector: '[square]'})
 export class SquareDirective {
@@ -11,29 +9,6 @@ export class SquareDirective {
   private messageService: MessageService;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
-    this.messageService = messageService;
-    console.log("SquareDirective messageService", messageService);
-
-    const ctx = elem.nativeElement.getContext('2d');
-    const canvas = elem.nativeElement;
-    this.messageService.subscribe('GameMessage', (payload) => {
-      canvas.addEventListener('mousedown', myDown, false);
-      canvas.addEventListener('mousemove', myMove, false);
-      canvas.addEventListener('mouseup', myUp, false);
-      console.log("GameMessage", payload.gameStart);
-    });
-    this.messageService.subscribe('TimeOutMessage', (payload) => {
-      canvas.removeEventListener("mousedown", myDown);
-      canvas.removeEventListener("mousemove", myMove);
-      canvas.removeEventListener("mouseup", myUp);
-      shape.endGame();
-    });
-
-    this.subscription = this.messageService.subscribe('SquareGetScore', (payload) => {
-      // isScore = payload.isSquareScore;
-      shape.onScore();
-    });
-
     const config = {
       width: 60,
       height: 60,
@@ -44,6 +19,25 @@ export class SquareDirective {
       clear: {},
       onTarget: {}
     };
+    const ctx = elem.nativeElement.getContext('2d');
+    const canvas = elem.nativeElement;
+    this.messageService = messageService;
+    this.messageService.subscribe('GameMessage', (payload) => {
+      canvas.addEventListener('mousedown', myDown, false);
+      canvas.addEventListener('mousemove', myMove, false);
+      canvas.addEventListener('mouseup', myUp, false);
+      console.log('GameMessage', payload.gameStart);
+    });
+    this.messageService.subscribe('TimeOutMessage', (payload) => {
+      canvas.removeEventListener('mousedown', myDown);
+      canvas.removeEventListener('mousemove', myMove);
+      canvas.removeEventListener('mouseup', myUp);
+      shape.endGame();
+    });
+
+    this.subscription = this.messageService.subscribe('SquareGetScore', (payload) => {
+      shape.onScore();
+    });
 
     config.paint = (x, y) => {
       ctx.fillStyle = config.color;
@@ -57,14 +51,11 @@ export class SquareDirective {
       return x < oldX + config.width && x > oldX && y < oldY + config.height && y > oldY;
     };
     const shape = new Shape(config);
-    console.log('shape:', shape);
 
     function myMove(e) {
       e.preventDefault();
       const mx = e.pageX - canvas.offsetLeft;
       const my = e.pageY - canvas.offsetTop;
-      // mouseEvent(e, canvas);
-      // shape.updateOnDrag(mousePoint.mx,mousePoint.my);
       shape.updateOnDrag(mx, my);
       shape.restoreOnMove();
     }

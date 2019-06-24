@@ -1,4 +1,4 @@
-import { CircleDirective } from './circle.directive';
+import {CircleDirective} from './circle.directive';
 
 describe('CircleDirective', () => {
   it('should create an instance', () => {

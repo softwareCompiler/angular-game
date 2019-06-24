@@ -10,31 +10,9 @@ export class CircleDirective {
   private messageService: MessageService;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
-    this.messageService = messageService;
-    console.log("CircleDirective messageService", messageService);
-    const ctx = elem.nativeElement.getContext('2d');
-    const canvas = elem.nativeElement;
-    this.messageService.subscribe('GameMessage', (payload) => {
-      canvas.addEventListener('mousedown', myDown, false);
-      canvas.addEventListener('mousemove', myMove, false);
-      canvas.addEventListener('mouseup', myUp, false);
-      console.log("GameMessage", payload.gameStart);
-    });
-    this.messageService.subscribe('TimeOutMessage', (payload) => {
-      canvas.removeEventListener("mousedown", myDown);
-      canvas.removeEventListener("mousemove", myMove);
-      canvas.removeEventListener("mouseup", myUp);
-      shape.endGame();
-    });
-
-    this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
-      shape.onScore();
-    });
-    //let randomNumber;
     const radius = 35;
     const startAngle = 0;
     const endAngle = 2 * Math.PI;
-
     const config = {
       width: 2 * radius,
       height: 2 * radius,
@@ -45,24 +23,42 @@ export class CircleDirective {
       clear: {},
       onTarget: {}
     };
+    const ctx = elem.nativeElement.getContext('2d');
+    this.messageService = messageService;
+    const canvas = elem.nativeElement;
+    this.messageService.subscribe('GameMessage', (payload) => {
+      canvas.addEventListener('mousedown', myDown, false);
+      canvas.addEventListener('mousemove', myMove, false);
+      canvas.addEventListener('mouseup', myUp, false);
+      console.log('GameMessage', payload.gameStart);
+    });
+    this.messageService.subscribe('TimeOutMessage', (payload) => {
+      canvas.removeEventListener('mousedown', myDown);
+      canvas.removeEventListener('mousemove', myMove);
+      canvas.removeEventListener('mouseup', myUp);
+      shape.endGame();
+    });
+
+    this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
+      shape.onScore();
+    });
 
     config.paint = (x, y) => {
       ctx.beginPath();
       ctx.arc(x, y, radius, startAngle, endAngle);
       ctx.fillStyle = config.color;
       ctx.fill();
-    }
+    };
 
     config.clear = (x, y) => {
       ctx.clearRect(x - radius, y - radius, config.width, config.height);
-    }
+    };
 
     config.onTarget = (x, y, oldX, oldY) => {
       return Math.sqrt((x - oldX) * (x - oldX) + (y - oldY) * (y - oldY)) <= radius;
-    }
+    };
 
     const shape = new Shape(config);
-
 
     function myMove(e) {
       const mx = e.pageX - canvas.offsetLeft;
@@ -78,7 +74,7 @@ export class CircleDirective {
       shape.dragStart(newX, newY);
     }
 
-    function myUp(e){
+    function myUp(e) {
       const cx = e.pageX - canvas.offsetLeft;
       const cy = e.pageY - canvas.offsetTop;
       messageService.broadcast('CircleMouseUpEvent', {cx, cy});

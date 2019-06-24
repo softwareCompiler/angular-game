@@ -4,17 +4,40 @@ import {Subscription} from 'rxjs';
 import {Container} from './container';
 
 @Directive({
-  selector: '[appSquareContainer]'
+  selector: '[SquareContainer]'
 })
 export class SquareContainerDirective {
   private subscription: Subscription;
   private messageService: MessageService;
-  constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
 
-    this.messageService = messageService;
+  constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
+    const radiusX = 60;
+    const radiusY = 30;
+    const h = 70;
+    const rightBoundaryWidth = 0;
+    const leftBoundaryWidth = 45;
+    const topBoundaryHeight = 20;
+    const bottomBoundaryHeight = 10;
+    const rotation = 0;
+    let squareScore = 0;
+    let circleScore = 0;
+    let isSquareScore = false;
+    const config = {
+      x: 200,
+      y: 350,
+      width: 2 * radiusX,
+      height: 3.5 * radiusY,
+      startAngle: 0,
+      endAngle: 2 * Math.PI,
+      score: 0,
+      paint: () => {
+      },
+    };
+
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement;
     canvas.addEventListener('mousemove', myMove, false);
+    this.messageService = messageService;
     this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
       circleScore = payload.circleScore;
     });
@@ -24,29 +47,8 @@ export class SquareContainerDirective {
       const sy = payload.cy;
       getScore(sx, sy);
     });
-    const radiusX = 60;
-    const radiusY = 30;
-    const h = 70;
-    const rightBoundaryWidth = 0;
-    const leftBoundaryWidth = 45;
-    const topBoundaryHeight = 20;
-    const bottomBoundaryHeight = 10;
-    const rotation = 0;
-    var config = {
-      x: 200,
-      y: 350,
-      width: 2 * radiusX,
-      height: 3.5 * radiusY,
-      startAngle: 0,
-      endAngle: 2 * Math.PI,
-      score: 0,
-      paint: () => {},
-    };
 
-    let squareScore = 0;
-    let circleScore = 0;
-    let isSquareScore = false;
-    config.paint = function(){
+    config.paint = function () {
       const text = ' ' + config.score;
       const fontHeight = 30;
       const color = 'black';
@@ -68,12 +70,10 @@ export class SquareContainerDirective {
     };
 
     function myMove(e) {
-      // const sx = e.pageX - canvas.offsetLeft;
-      // const sy = e.pageY - canvas.offsetTop;
       container.restoreOnMove();
     }
 
-    const updateScore = function(){
+    const updateScore = function () {
       const totalScore = circleScore + squareScore;
       document.getElementById('scoreBoard').innerHTML = '' + totalScore;
     };
@@ -90,7 +90,7 @@ export class SquareContainerDirective {
       }
     };
 
-    const isOnScoreBoard = function(sx, sy){
+    const isOnScoreBoard = function (sx, sy) {
       return sx < config.x + rightBoundaryWidth && sx > config.x - leftBoundaryWidth &&
         sy < config.y + bottomBoundaryHeight && sy > config.y - topBoundaryHeight;
     };

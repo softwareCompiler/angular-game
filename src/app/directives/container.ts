@@ -1,8 +1,5 @@
-
 export class Container {
   restoreOnMove: any;
-  getScore: any;
-
 
   constructor(config) {
     config.paint();

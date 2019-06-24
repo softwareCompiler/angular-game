@@ -14,6 +14,7 @@ export class Shape {
     let oldY = defaultY;
     let draggable = false;
     let timer = null;
+
     config.paint(oldX, oldY);
     this.autoDrop = () => {
       clearTimer();

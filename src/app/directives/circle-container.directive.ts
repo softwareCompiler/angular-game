@@ -5,29 +5,13 @@ import {Container} from './container';
 
 @Directive({
   selector: '[circleContainer]',
-  providers: [MessageService]
+  providers: []
 })
-export class RoundContainerDirective {
+export class CircleContainerDirective {
   private subscription: Subscription;
   private messageService: MessageService;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
-    this.messageService = messageService;
-    const ctx = elem.nativeElement.getContext('2d');
-    const canvas = elem.nativeElement;
-    canvas.addEventListener('mousemove', myMove, false);
-
-    this.subscription = messageService.subscribe('SquareGetScore', (payload) => {
-      squareScore = payload.squareScore;
-    });
-
-    this.subscription = messageService.subscribe('CircleMouseUpEvent', (payload) => {
-      const sx = payload.cx;
-      const sy = payload.cy;
-      getScore(sx, sy);
-    });
-
-
     const radius = 50;
     const scoreRadius = 10;
     let circleScore = 0;
@@ -45,6 +29,21 @@ export class RoundContainerDirective {
       paint: () => {
       },
     };
+    const ctx = elem.nativeElement.getContext('2d');
+    const canvas = elem.nativeElement;
+    canvas.addEventListener('mousemove', myMove, false);
+
+    this.messageService = messageService;
+    this.subscription = messageService.subscribe('SquareGetScore', (payload) => {
+      squareScore = payload.squareScore;
+    });
+
+    this.subscription = messageService.subscribe('CircleMouseUpEvent', (payload) => {
+      const sx = payload.cx;
+      const sy = payload.cy;
+      getScore(sx, sy);
+    });
+
     config.paint = () => {
       const text = ' ' + config.score;
       const fontHeight = 30;
@@ -62,8 +61,6 @@ export class RoundContainerDirective {
     };
 
     function myMove(e) {
-      // const sx = e.pageX - canvas.offsetLeft;
-      // const sy = e.pageY - canvas.offsetTop;
       container.restoreOnMove();
     }
 

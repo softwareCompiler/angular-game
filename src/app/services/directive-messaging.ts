@@ -1,4 +1,4 @@
-// https://stackoverflow.com/questions/34700438/global-events-in-angular
+
 import {Injectable} from '@angular/core';
 
 import {Subject} from 'rxjs';

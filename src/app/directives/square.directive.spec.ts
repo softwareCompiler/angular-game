@@ -1,4 +1,4 @@
-import { SquareDirective } from './square.directive';
+import {SquareDirective} from './square.directive';
 
 describe('SquareDirective', () => {
   it('should create an instance', () => {
