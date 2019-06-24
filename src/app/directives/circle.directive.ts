@@ -26,6 +26,8 @@ export class CircleDirective {
     const ctx = elem.nativeElement.getContext('2d');
     this.messageService = messageService;
     const canvas = elem.nativeElement;
+    // See if it is possible to create a directive that uses canvas. The code that add and and remove event listeners
+    // can be placed in that directive to reduce duplications. The directive should fire mouse events.
     this.messageService.subscribe('GameMessage', (payload) => {
       canvas.addEventListener('mousedown', myDown, false);
       canvas.addEventListener('mousemove', myMove, false);
@@ -60,6 +62,7 @@ export class CircleDirective {
 
     const shape = new Shape(config);
 
+    // myMove, myDown, and myUp have lots of duplicate. They should be moved to the canvas directive mentioned above.
     function myMove(e) {
       const mx = e.pageX - canvas.offsetLeft;
       const my = e.pageY - canvas.offsetTop;
