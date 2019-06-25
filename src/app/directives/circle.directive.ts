@@ -64,6 +64,7 @@ export class CircleDirective {
 
     // myMove, myDown, and myUp have lots of duplicate. They should be moved to the canvas directive mentioned above.
     function myMove(e) {
+      e.preventDefault();
       const mx = e.pageX - canvas.offsetLeft;
       const my = e.pageY - canvas.offsetTop;
       shape.updateOnDrag(mx, my);
@@ -78,6 +79,7 @@ export class CircleDirective {
     }
 
     function myUp(e) {
+      e.preventDefault();
       const cx = e.pageX - canvas.offsetLeft;
       const cy = e.pageY - canvas.offsetTop;
       messageService.broadcast('CircleMouseUpEvent', {cx, cy});

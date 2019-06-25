@@ -2,6 +2,7 @@ import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Shape} from './shape';
+import {CanvasDirective} from './canvas.directive';
 
 @Directive({selector: '[square]'})
 export class SquareDirective {
@@ -21,17 +22,30 @@ export class SquareDirective {
     };
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement;
+    const canvasDirective = new CanvasDirective(elem, renderer);
     this.messageService = messageService;
     this.messageService.subscribe('GameMessage', (payload) => {
-      canvas.addEventListener('mousedown', myDown, false);
-      canvas.addEventListener('mousemove', myMove, false);
-      canvas.addEventListener('mouseup', myUp, false);
-      console.log('GameMessage', payload.gameStart);
+      // canvas.addEventListener('mousedown', myDown, false);
+      // canvas.addEventListener('mousemove', myMove, false);
+      // canvas.addEventListener('mouseup', myUp, false);
+      // console.log('GameMessage', payload.gameStart);
+      // const canvasDirective = new CanvasDirective(elem, renderer);
+      canvasDirective.mouseActive();
+      const myMove = canvasDirective.myMove();
+      const myDown = canvasDirective.myDown();
+      const cx = canvasDirective.myUp.cx;
+      const cy = canvasDirective.myUp.cy;
+      shape.updateOnDrag(myMove.mx, myMove.my);
+      shape.restoreOnMove();
+      shape.dragStart(myDown.newX, myDown.newY);
+      messageService.broadcast('SquareMouseUpEvent', {cx, cy});
     });
     this.messageService.subscribe('TimeOutMessage', (payload) => {
-      canvas.removeEventListener('mousedown', myDown);
-      canvas.removeEventListener('mousemove', myMove);
-      canvas.removeEventListener('mouseup', myUp);
+      // canvas.removeEventListener('mousedown', myDown);
+      // canvas.removeEventListener('mousemove', myMove);
+      // canvas.removeEventListener('mouseup', myUp);
+      // const canvasDirective = new CanvasDirective(elem, renderer);
+      canvasDirective.mouseInactive();
       shape.endGame();
     });
 
@@ -51,28 +65,27 @@ export class SquareDirective {
       return x < oldX + config.width && x > oldX && y < oldY + config.height && y > oldY;
     };
     const shape = new Shape(config);
-
-    function myMove(e) {
-      e.preventDefault();
-      const mx = e.pageX - canvas.offsetLeft;
-      const my = e.pageY - canvas.offsetTop;
-      shape.updateOnDrag(mx, my);
-      shape.restoreOnMove();
-    }
-
-    function myDown(e) {
-      e.preventDefault();
-      const newX = e.pageX - canvas.offsetLeft;
-      const newY = e.pageY - canvas.offsetTop;
-      shape.dragStart(newX, newY);
-    }
-
-    function myUp(e) {
-      e.preventDefault();
-      const cx = e.pageX - canvas.offsetLeft;
-      const cy = e.pageY - canvas.offsetTop;
-      messageService.broadcast('SquareMouseUpEvent', {cx, cy});
-    }
+    // function myMove(e) {
+    //   e.preventDefault();
+    //   const mx = e.pageX - canvas.offsetLeft;
+    //   const my = e.pageY - canvas.offsetTop;
+    //   shape.updateOnDrag(mx, my);
+    //   shape.restoreOnMove();
+    // }
+    //
+    // function myDown(e) {
+    //   e.preventDefault();
+    //   const newX = e.pageX - canvas.offsetLeft;
+    //   const newY = e.pageY - canvas.offsetTop;
+    //   shape.dragStart(newX, newY);
+    // }
+    //
+    // function myUp(e) {
+    //   e.preventDefault();
+    //   const cx = e.pageX - canvas.offsetLeft;
+    //   const cy = e.pageY - canvas.offsetTop;
+    //   messageService.broadcast('SquareMouseUpEvent', {cx, cy});
+    // }
 
   }
 }

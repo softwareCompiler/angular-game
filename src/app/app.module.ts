@@ -13,6 +13,7 @@ import {CircleContainerDirective} from './directives/circle-container.directive'
 import {SquareContainerDirective} from './directives/square-container.directive';
 import {SquareDirective} from './directives/square.directive';
 import {CircleDirective} from './directives/circle.directive';
+// import {CanvasDirective} from './directives/canvas.directive';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {CircleDirective} from './directives/circle.directive';
     CircleContainerDirective,
     SquareContainerDirective,
     SquareDirective,
-    CircleDirective,
+    CircleDirective
+    // CanvasDirective
   ],
   imports: [
     BrowserModule,
