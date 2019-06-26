@@ -22,7 +22,7 @@ export class DragGameComponent {
     console.log('publish this.messageService 000 ...', this.messageService);
     this.messageService.broadcast('GameMessage', {});
     const timer = () => {
-      let gameOver = true;
+      const gameRuning = false;
       diff = duration - (((Date.now() - start) / mileSecondFactor) | 0);
       minutes = Math.floor(diff / minutesFactor);
       seconds = (diff % secondFactor) | 0;
@@ -32,19 +32,18 @@ export class DragGameComponent {
 
       if (diff <= 0) {
         clearInterval(clock);
-        this.messageService.broadcast('TimeOutMessage', {gameOver});
+        this.messageService.broadcast('TimeOutMessage', {gameRuning});
       }
     };
 
     timer();
-    let clock = setInterval(timer, mileSecondFactor);
+    const clock = setInterval(timer, mileSecondFactor);
   }
   gameStart = () => {
-    let gameStart = true;
+    const gameRuning = true;
     const oneMinutes = 30;
     const display = document.querySelector('#time');
     this.startTimer(oneMinutes, display);
-    this.messageService.broadcast('GameMessage', {gameStart});
+    this.messageService.broadcast('GameMessage', {gameRuning});
   }
-
 }

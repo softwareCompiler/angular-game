@@ -5,6 +5,7 @@ import {Subscription} from 'rxjs';
 
 @Directive({selector: '[MouseTracker]'})
 export class MouseTrackerDirective {
+
   private subscription: Subscription;
   private messageService: MessageService;
   // mouseActive: any;
@@ -16,60 +17,69 @@ export class MouseTrackerDirective {
     this.messageService = messageService;
     const canvas = elem.nativeElement;
 
-    canvas.addEventListener('mousemove', e => {
-      e.preventDefault();
-      const mx = e.pageX - canvas.offsetLeft;
-      const my = e.pageY - canvas.offsetTop;
-      console.log('mx:', mx);
-      console.log('my:', my);
-      messageService.broadcast('mousemove', {mx, my});
+    this.messageService.subscribe('GameMessage', (payload) => {
+      mouseActive();
+    });
 
-    }, false);
+    this.messageService.subscribe('TimeOutMessage', (payload)=> {
+      mouseInavtive();
 
-    canvas.addEventListener('mouseup', e => {
-      e.preventDefault();
-      const cx = e.pageX - canvas.offsetLeft;
-      const cy = e.pageY - canvas.offsetTop;
-      console.log('cx:', cx);
-      console.log('cy:', cy);
-      messageService.broadcast('mouseup', {cx, cy});
+    });
 
-    }, false);
-
-    canvas.addEventListener('mousedown', e => {
-      e.preventDefault();
-      const newX = e.pageX - canvas.offsetLeft;
-      const newY = e.pageY - canvas.offsetTop;
-      console.log('newX:', newX);
-      console.log('newY:', newY);
-      messageService.broadcast('mousedown', {newX, newY});
-
-    }, false);
-
-    this.messageService.subscribe('TimeOutMessage', (payload) => {
-      canvas.removeEventListener('mousedown', e => {
-        e.preventDefault();
-        const newX = e.pageX - canvas.offsetLeft;
-        const newY = e.pageY - canvas.offsetTop;
-        messageService.broadcast('mousedown', {newX, newY});
-
-      });
-      canvas.removeEventListener('mousemove', e => {
+    const mouseActive = () => {
+      canvas.addEventListener('mousemove', e => {
         e.preventDefault();
         const mx = e.pageX - canvas.offsetLeft;
         const my = e.pageY - canvas.offsetTop;
+        console.log('mx:', mx);
+        console.log('my:', my);
         messageService.broadcast('mousemove', {mx, my});
 
-      });
-      canvas.removeEventListener('mouseup', e => {
+      }, false);
+
+      canvas.addEventListener('mouseup', e => {
         e.preventDefault();
         const cx = e.pageX - canvas.offsetLeft;
         const cy = e.pageY - canvas.offsetTop;
+        console.log('cx:', cx);
+        console.log('cy:', cy);
         messageService.broadcast('mouseup', {cx, cy});
 
-      });
-    });
+      }, false);
 
+      canvas.addEventListener('mousedown', e => {
+        e.preventDefault();
+        const newX = e.pageX - canvas.offsetLeft;
+        const newY = e.pageY - canvas.offsetTop;
+        console.log('newX:', newX);
+        console.log('newY:', newY);
+        messageService.broadcast('mousedown', {newX, newY});
 
+      }, false);
+    };
+
+    const mouseInavtive = () => {
+      canvas.removeEventListener('mousedown', e => {
+        // e.preventDefault();
+        // const newX = e.pageX - canvas.offsetLeft;
+        // const newY = e.pageY - canvas.offsetTop;
+        // messageService.broadcast('mousedown', {newX, newY});
+
+      }, true);
+      canvas.removeEventListener('mousemove', e => {
+        // e.preventDefault();
+        // const mx = e.pageX - canvas.offsetLeft;
+        // const my = e.pageY - canvas.offsetTop;
+        // messageService.broadcast('mousemove', {mx, my});
+
+      }, true);
+      canvas.removeEventListener('mouseup', e => {
+        // e.preventDefault();
+        // const cx = e.pageX - canvas.offsetLeft;
+        // const cy = e.pageY - canvas.offsetTop;
+        // messageService.broadcast('mouseup', {cx, cy});
+
+      }, true);
+    };
   }
 }

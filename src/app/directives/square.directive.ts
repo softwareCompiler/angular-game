@@ -41,9 +41,9 @@ export class SquareDirective {
 
     });
     this.messageService.subscribe('TimeOutMessage', (payload) => {
-      // canvas.removeEventListener('mousedown', myDown);
-      // canvas.removeEventListener('mousemove', myMove);
-      // canvas.removeEventListener('mouseup', myUp);
+      // canvas.removeEventListener('mousedown');
+      // canvas.removeEventListener('mousemove');
+      // canvas.removeEventListener('mouseup');
       // const canvasDirective = new MouseTrackerDirective(elem, renderer);
       // canvasDirective.mouseInactive();
       shape.endGame();
