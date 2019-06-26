@@ -22,10 +22,9 @@ export class SquareDirective {
       onTarget: {}
     };
     const ctx = elem.nativeElement.getContext('2d');
-    const canvas = elem.nativeElement;
-    // const canvasDirective = new MouseTrackerDirective(elem, renderer, messageService);
     this.messageService = messageService;
     this.messageService.subscribe('GameMessage', (payload) => {
+      // This is good
     this.messageService.subscribe('mousemove', (payload) => {
       shape.updateOnDrag(payload.mx, payload.my);
       shape.restoreOnMove();

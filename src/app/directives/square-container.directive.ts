@@ -36,6 +36,7 @@ export class SquareContainerDirective {
 
     const ctx = elem.nativeElement.getContext('2d');
     const canvas = elem.nativeElement;
+    // We don't need any canvas add event listener code.
     canvas.addEventListener('mousemove', myMove, false);
     this.messageService = messageService;
     this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
@@ -43,12 +44,10 @@ export class SquareContainerDirective {
     });
 
     this.subscription = messageService.subscribe('SquareMouseUpEvent', (payload) => {
-      const sx = payload.cx;
-      const sy = payload.cy;
-      getScore(sx, sy);
+      getScore(payload.cx, payload.cy);
     });
 
-    config.paint = function () {
+    config.paint = () => {
       const text = ' ' + config.score;
       const fontHeight = 30;
       const color = 'black';
