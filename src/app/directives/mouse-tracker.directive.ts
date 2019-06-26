@@ -17,25 +17,26 @@ export class MouseTrackerDirective {
     this.messageService = messageService;
     const canvas = elem.nativeElement;
 
+    // This is better than what I suggested because you have better control when everything shall start.
     this.messageService.subscribe('GameMessage', (payload) => {
       mouseActive();
     });
 
     this.messageService.subscribe('TimeOutMessage', (payload)=> {
-      mouseInavtive();
+      mouseInactive();
 
     });
 
+    const mouseMoveListener = e => {
+      e.preventDefault();
+      const mx = e.pageX - canvas.offsetLeft;
+      const my = e.pageY - canvas.offsetTop;
+      console.log('mx:', mx);
+      console.log('my:', my);
+      messageService.broadcast('mousemove', {mx, my});
+    };
     const mouseActive = () => {
-      canvas.addEventListener('mousemove', e => {
-        e.preventDefault();
-        const mx = e.pageX - canvas.offsetLeft;
-        const my = e.pageY - canvas.offsetTop;
-        console.log('mx:', mx);
-        console.log('my:', my);
-        messageService.broadcast('mousemove', {mx, my});
-
-      }, false);
+      canvas.addEventListener('mousemove', mouseMoveListener, false);
 
       canvas.addEventListener('mouseup', e => {
         e.preventDefault();
@@ -58,14 +59,8 @@ export class MouseTrackerDirective {
       }, false);
     };
 
-    const mouseInavtive = () => {
-      canvas.removeEventListener('mousedown', e => {
-        // e.preventDefault();
-        // const newX = e.pageX - canvas.offsetLeft;
-        // const newY = e.pageY - canvas.offsetTop;
-        // messageService.broadcast('mousedown', {newX, newY});
-
-      }, true);
+    const mouseInactive = () => {
+      canvas.removeEventListener('mousedown', mouseMoveListener, true);
       canvas.removeEventListener('mousemove', e => {
         // e.preventDefault();
         // const mx = e.pageX - canvas.offsetLeft;
