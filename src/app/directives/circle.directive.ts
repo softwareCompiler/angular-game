@@ -26,18 +26,18 @@ export class CircleDirective {
     const ctx = elem.nativeElement.getContext('2d');
     this.messageService = messageService;
     const canvas = elem.nativeElement;
-    // See if it is possible to create a directive that uses canvas. The code that add and and remove event listeners
-    // can be placed in that directive to reduce duplications. The directive should fire mouse events.
-    this.messageService.subscribe('GameMessage', (payload) => {
-      canvas.addEventListener('mousedown', myDown, false);
-      canvas.addEventListener('mousemove', myMove, false);
-      canvas.addEventListener('mouseup', myUp, false);
-      console.log('GameMessage', payload.gameStart);
-    });
+    // We shall no longer have the code that add and remove listeners because we have MouseTrcker now.
+    // We only need to subscribe to the mouse events.
+    // this.messageService.subscribe('GameMessage', (payload) => {
+    //   canvas.addEventListener('mousedown', myDown, false);
+    //   canvas.addEventListener('mousemove', myMove, false);
+    //   canvas.addEventListener('mouseup', myUp, false);
+    //   console.log('GameMessage', payload.gameStart);
+    // });
     this.messageService.subscribe('TimeOutMessage', (payload) => {
-      canvas.removeEventListener('mousedown', myDown);
-      canvas.removeEventListener('mousemove', myMove);
-      canvas.removeEventListener('mouseup', myUp);
+      // canvas.removeEventListener('mousedown', myDown);
+      // canvas.removeEventListener('mousemove', myMove);
+      // canvas.removeEventListener('mouseup', myUp);
       shape.endGame();
     });
 
@@ -64,6 +64,7 @@ export class CircleDirective {
 
     // myMove, myDown, and myUp have lots of duplicate. They should be moved to the canvas directive mentioned above.
     function myMove(e) {
+      // The 5 lines below are no longer necessary. Think about what to do instead.
       e.preventDefault();
       const mx = e.pageX - canvas.offsetLeft;
       const my = e.pageY - canvas.offsetTop;
@@ -74,6 +75,7 @@ export class CircleDirective {
     }
 
     function myDown(e) {
+      // The 3 lines below are no longer necessary.
       e.preventDefault();
       const newX = e.pageX - canvas.offsetLeft;
       const newY = e.pageY - canvas.offsetTop;
@@ -81,6 +83,7 @@ export class CircleDirective {
     }
 
     function myUp(e) {
+      // The 3 lines below are no longer necessary.
       e.preventDefault();
       const cx = e.pageX - canvas.offsetLeft;
       const cy = e.pageY - canvas.offsetTop;
