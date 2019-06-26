@@ -2,6 +2,7 @@ import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Shape} from './shape';
+
 // import {MouseTrackerDirective} from './canvas.directive';
 
 @Directive({selector: '[square]'})
@@ -25,21 +26,19 @@ export class SquareDirective {
     // const canvasDirective = new MouseTrackerDirective(elem, renderer, messageService);
     this.messageService = messageService;
     this.messageService.subscribe('GameMessage', (payload) => {
-      // Should subscribe the mouse events (like mousemove, mousedown, etc).
-      // canvas.addEventListener('mousedown', myDown, false);
-      // canvas.addEventListener('mousemove', myMove, false);
-      // canvas.addEventListener('mouseup', myUp, false);
-      // console.log('GameMessage', payload.gameStart);
-      // const canvasDirective = new MouseTrackerDirective(elem, renderer);
-      // canvasDirective.mouseActive();
-      // const myMove = canvasDirective.myMove();
-      // const myDown = canvasDirective.myDown();
-      // const cx = canvasDirective.myUp.cx;
-      // const cy = canvasDirective.myUp.cy;
-      // shape.updateOnDrag(myMove.mx, myMove.my);
-      // shape.restoreOnMove();
-      // shape.dragStart(myDown.newX, myDown.newY);
-      // messageService.broadcast('SquareMouseUpEvent', {cx, cy});
+    this.messageService.subscribe('mousemove', (payload) => {
+      shape.updateOnDrag(payload.mx, payload.my);
+      shape.restoreOnMove();
+    });
+    this.messageService.subscribe('mouseup', (payload) => {
+      const cx = payload.cx;
+      const cy = payload.cy;
+      messageService.broadcast('SquareMouseUpEvent', {cx, cy});
+    });
+    this.messageService.subscribe('mousedown', (payload) => {
+      shape.dragStart(payload.newX, payload.newY);
+    });
+
     });
     this.messageService.subscribe('TimeOutMessage', (payload) => {
       // canvas.removeEventListener('mousedown', myDown);

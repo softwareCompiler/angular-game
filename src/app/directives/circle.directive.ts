@@ -67,6 +67,8 @@ export class CircleDirective {
       e.preventDefault();
       const mx = e.pageX - canvas.offsetLeft;
       const my = e.pageY - canvas.offsetTop;
+      console.log('mx2:', mx);
+      console.log('my2:', my);
       shape.updateOnDrag(mx, my);
       shape.restoreOnMove();
     }
