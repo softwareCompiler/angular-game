@@ -22,10 +22,9 @@ export class SquareDirective {
       onTarget: {}
     };
     const ctx = elem.nativeElement.getContext('2d');
-    const canvas = elem.nativeElement;
-    // const canvasDirective = new MouseTrackerDirective(elem, renderer, messageService);
+    //const canvas = elem.nativeElement;
     this.messageService = messageService;
-    this.messageService.subscribe('GameMessage', (payload) => {
+
     this.messageService.subscribe('mousemove', (payload) => {
       shape.updateOnDrag(payload.mx, payload.my);
       shape.restoreOnMove();
@@ -39,13 +38,8 @@ export class SquareDirective {
       shape.dragStart(payload.newX, payload.newY);
     });
 
-    });
+
     this.messageService.subscribe('TimeOutMessage', (payload) => {
-      // canvas.removeEventListener('mousedown');
-      // canvas.removeEventListener('mousemove');
-      // canvas.removeEventListener('mouseup');
-      // const canvasDirective = new MouseTrackerDirective(elem, renderer);
-      // canvasDirective.mouseInactive();
       shape.endGame();
     });
 
@@ -65,27 +59,6 @@ export class SquareDirective {
       return x < oldX + config.width && x > oldX && y < oldY + config.height && y > oldY;
     };
     const shape = new Shape(config);
-    // function myMove(e) {
-    //   e.preventDefault();
-    //   const mx = e.pageX - canvas.offsetLeft;
-    //   const my = e.pageY - canvas.offsetTop;
-    //   shape.updateOnDrag(mx, my);
-    //   shape.restoreOnMove();
-    // }
-    //
-    // function myDown(e) {
-    //   e.preventDefault();
-    //   const newX = e.pageX - canvas.offsetLeft;
-    //   const newY = e.pageY - canvas.offsetTop;
-    //   shape.dragStart(newX, newY);
-    // }
-    //
-    // function myUp(e) {
-    //   e.preventDefault();
-    //   const cx = e.pageX - canvas.offsetLeft;
-    //   const cy = e.pageY - canvas.offsetTop;
-    //   messageService.broadcast('SquareMouseUpEvent', {cx, cy});
-    // }
 
   }
 }
