@@ -44,7 +44,7 @@ export class SquareContainerDirective {
     });
 
     this.subscription = messageService.subscribe('SquareMouseUpEvent', (payload) => {
-      getScore(payload.cx, payload.cy);
+      getScore(payload.x, payload.y);
     });
 
     config.paint = () => {

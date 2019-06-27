@@ -39,8 +39,8 @@ export class CircleContainerDirective {
     });
 
     this.subscription = messageService.subscribe('CircleMouseUpEvent', (payload) => {
-      const sx = payload.cx;
-      const sy = payload.cy;
+      const sx = payload.x;
+      const sy = payload.y;
       getScore(sx, sy);
     });
 

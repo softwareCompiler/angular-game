@@ -24,27 +24,6 @@ export class CircleDirective {
       onTarget: {}
     };
     const ctx = elem.nativeElement.getContext('2d');
-    this.messageService = messageService;
-    const canvas = elem.nativeElement;
-    // We shall no longer have the code that add and remove listeners because we have MouseTrcker now.
-    // We only need to subscribe to the mouse events.
-    // this.messageService.subscribe('GameMessage', (payload) => {
-    //   canvas.addEventListener('mousedown', myDown, false);
-    //   canvas.addEventListener('mousemove', myMove, false);
-    //   canvas.addEventListener('mouseup', myUp, false);
-    //   console.log('GameMessage', payload.gameStart);
-    // });
-    this.messageService.subscribe('TimeOutMessage', (payload) => {
-      // canvas.removeEventListener('mousedown', myDown);
-      // canvas.removeEventListener('mousemove', myMove);
-      // canvas.removeEventListener('mouseup', myUp);
-      shape.endGame();
-    });
-
-    this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
-      shape.onScore();
-    });
-
     config.paint = (x, y) => {
       ctx.beginPath();
       ctx.arc(x, y, radius, startAngle, endAngle);
@@ -61,33 +40,23 @@ export class CircleDirective {
     };
 
     const shape = new Shape(config);
+    this.messageService = messageService;
 
-    // myMove, myDown, and myUp have lots of duplicate. They should be moved to the canvas directive mentioned above.
-    function myMove(e) {
-      // The 5 lines below are no longer necessary. Think about what to do instead.
-      e.preventDefault();
-      const mx = e.pageX - canvas.offsetLeft;
-      const my = e.pageY - canvas.offsetTop;
-      console.log('mx2:', mx);
-      console.log('my2:', my);
-      shape.updateOnDrag(mx, my);
+    this.messageService.subscribe('mousemove', (payload) => {
+      shape.updateOnDrag(payload);
       shape.restoreOnMove();
-    }
+    });
+    this.messageService.subscribe('mouseup', (payload) => {
+      this.messageService.broadcast('CircleMouseUpEvent', payload);
+    });
+    this.messageService.subscribe('mousedown', shape.dragStart);
 
-    function myDown(e) {
-      // The 3 lines below are no longer necessary.
-      e.preventDefault();
-      const newX = e.pageX - canvas.offsetLeft;
-      const newY = e.pageY - canvas.offsetTop;
-      shape.dragStart(newX, newY);
-    }
+    this.messageService.subscribe('TimeOutMessage', (payload) => {
+      shape.endGame();
+    });
 
-    function myUp(e) {
-      // The 3 lines below are no longer necessary.
-      e.preventDefault();
-      const cx = e.pageX - canvas.offsetLeft;
-      const cy = e.pageY - canvas.offsetTop;
-      messageService.broadcast('CircleMouseUpEvent', {cx, cy});
-    }
+    this.subscription = this.messageService.subscribe('CircleGetScore', (payload) => {
+      shape.onScore();
+    });
   }
 }

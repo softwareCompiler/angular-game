@@ -25,17 +25,21 @@ export class Shape {
       }, 50);
     };
 
-    this.updateOnDrag = (x, y) => {
+    // Change two parameters into one parameter to make this function easier to use from outside.
+    this.updateOnDrag = (coordinates) => {
       if (draggable) {
         config.clear(oldX, oldY);
-        config.paint(x, y);
-        oldX = x;
-        oldY = y;
+        config.paint(coordinates.x, coordinates.y);
+        oldX = coordinates.x;
+        oldY = coordinates.y;
       }
     };
 
-    this.dragStart = (x, y) => {
-      if (config.onTarget(x, y, oldX, oldY)) {
+    this.dragStart = (coordinates) => {
+      console.log('dragStart');
+      if (config.onTarget(coordinates.x, coordinates.y, oldX, oldY)) {
+        console.log('draggable trueee');
+
         draggable = true;
       }
     };
