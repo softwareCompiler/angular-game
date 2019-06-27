@@ -25,27 +25,23 @@ export class MouseTrackerDirective {
 
     const mouseMoveListener = e => {
       e.preventDefault();
-      const mx = e.pageX - canvas.offsetLeft;
-      const my = e.pageY - canvas.offsetTop;
-      console.log('mx:', mx);
-      console.log('my:', my);
-      messageService.broadcast('mousemove', {mx, my});
+      const x = e.pageX - canvas.offsetLeft;
+      const y = e.pageY - canvas.offsetTop;
+      messageService.broadcast('mousemove', {x, y});
     };
 
     const mouseUpListener = e => {
       e.preventDefault();
-      const cx = e.pageX - canvas.offsetLeft;
-      const cy = e.pageY - canvas.offsetTop;
-      console.log('cx:', cx);
-      console.log('cy:', cy);
-      messageService.broadcast('mouseup', {cx, cy});
+      const x = e.pageX - canvas.offsetLeft;
+      const y = e.pageY - canvas.offsetTop;
+      messageService.broadcast('mouseup', {x, y});
     };
 
     const mouseDownListener = e => {
       e.preventDefault();
-      const newX = e.pageX - canvas.offsetLeft;
-      const newY = e.pageY - canvas.offsetTop;
-      messageService.broadcast('mousedown', {newX, newY});
+      const x = e.pageX - canvas.offsetLeft;
+      const y = e.pageY - canvas.offsetTop;
+      messageService.broadcast('mousedown', {x, y});
     };
 
 

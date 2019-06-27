@@ -11,6 +11,7 @@ export class SquareDirective {
   private messageService: MessageService;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
+    const ctx = elem.nativeElement.getContext('2d');
     const config = {
       width: 60,
       height: 60,
@@ -21,32 +22,6 @@ export class SquareDirective {
       clear: {},
       onTarget: {}
     };
-    const ctx = elem.nativeElement.getContext('2d');
-    //const canvas = elem.nativeElement;
-    this.messageService = messageService;
-
-    this.messageService.subscribe('mousemove', (payload) => {
-      shape.updateOnDrag(payload.mx, payload.my);
-      shape.restoreOnMove();
-    });
-    this.messageService.subscribe('mouseup', (payload) => {
-      const cx = payload.cx;
-      const cy = payload.cy;
-      messageService.broadcast('SquareMouseUpEvent', {cx, cy});
-    });
-    this.messageService.subscribe('mousedown', (payload) => {
-      shape.dragStart(payload.newX, payload.newY);
-    });
-
-
-    this.messageService.subscribe('TimeOutMessage', (payload) => {
-      shape.endGame();
-    });
-
-    this.subscription = this.messageService.subscribe('SquareGetScore', (payload) => {
-      shape.onScore();
-    });
-
     config.paint = (x, y) => {
       ctx.fillStyle = config.color;
       ctx.fillRect(x, y, config.width, config.height);
@@ -60,5 +35,28 @@ export class SquareDirective {
     };
     const shape = new Shape(config);
 
+    this.messageService = messageService;
+    this.messageService.subscribe('GameMessage', (payload) => {
+      // add code here to handle end of game.
+    });
+    this.messageService.subscribe('mousemove', (payload) => {
+      shape.updateOnDrag(payload);
+      shape.restoreOnMove();
+    });
+    this.messageService.subscribe('mouseup', (payload) => {
+      this.messageService.broadcast('SquareMouseUpEvent', payload);
+    });
+    this.messageService.subscribe('mousedown', shape.dragStart);
+
+
+    // Try to understand one of the most important techniques
+    // for functional programming; passing functions just like primitive values.
+    this.messageService.subscribe('TimeOutMessage', shape.endGame);
+    // The 3 lines below are equivalent to the line above.
+    //   this.messageService.subscribe('TimeOutMessage', (payload) => {
+    //   shape.endGame();
+    // });
+
+    this.subscription = this.messageService.subscribe('SquareGetScore', shape.onScore);
   }
 }

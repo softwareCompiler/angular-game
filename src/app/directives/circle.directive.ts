@@ -24,30 +24,6 @@ export class CircleDirective {
       onTarget: {}
     };
     const ctx = elem.nativeElement.getContext('2d');
-   // const canvas = elem.nativeElement;
-    this.messageService = messageService;
-
-    this.messageService.subscribe('mousemove', (payload) => {
-      shape.updateOnDrag(payload.mx, payload.my);
-      shape.restoreOnMove();
-    });
-    this.messageService.subscribe('mouseup', (payload) => {
-      const cx = payload.cx;
-      const cy = payload.cy;
-      messageService.broadcast('CircleMouseUpEvent', {cx, cy});
-    });
-    this.messageService.subscribe('mousedown', (payload) => {
-      shape.dragStart(payload.newX, payload.newY);
-    });
-
-    this.messageService.subscribe('TimeOutMessage', (payload) => {
-      shape.endGame();
-    });
-
-    this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
-      shape.onScore();
-    });
-
     config.paint = (x, y) => {
       ctx.beginPath();
       ctx.arc(x, y, radius, startAngle, endAngle);
@@ -64,5 +40,23 @@ export class CircleDirective {
     };
 
     const shape = new Shape(config);
+    this.messageService = messageService;
+
+    this.messageService.subscribe('mousemove', (payload) => {
+      shape.updateOnDrag(payload);
+      shape.restoreOnMove();
+    });
+    this.messageService.subscribe('mouseup', (payload) => {
+      this.messageService.broadcast('CircleMouseUpEvent', payload);
+    });
+    this.messageService.subscribe('mousedown', shape.dragStart);
+
+    this.messageService.subscribe('TimeOutMessage', (payload) => {
+      shape.endGame();
+    });
+
+    this.subscription = this.messageService.subscribe('CircleGetScore', (payload) => {
+      shape.onScore();
+    });
   }
 }
