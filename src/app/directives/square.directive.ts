@@ -3,8 +3,6 @@ import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Shape} from './shape';
 
-// import {MouseTrackerDirective} from './canvas.directive';
-
 @Directive({selector: '[square]'})
 export class SquareDirective {
   private subscription: Subscription;
@@ -42,7 +40,7 @@ export class SquareDirective {
     this.messageService.subscribe('mouseup', (payload) => {
       this.messageService.broadcast('SquareMouseUpEvent', payload);
     });
-    this.messageService.subscribe('mousedown', shape.dragStart);
+    this.messageService.subscribeForMouseDownEvent(shape.dragStart);
 
     this.messageService.subscribe('TimeOutMessage', shape.endGame);
 

@@ -3,9 +3,12 @@ import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Container} from './container';
 
+// @Directive({
+//   selector: '[circleContainer]',
+//   providers: []
+// })
 @Directive({
-  selector: '[circleContainer]',
-  providers: []
+  selector: '[circleContainer]'
 })
 export class CircleContainerDirective {
   private subscription: Subscription;

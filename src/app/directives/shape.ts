@@ -18,7 +18,7 @@ export class Shape {
     config.paint(oldX, oldY);
     this.autoDrop = () => {
       clearTimer();
-      timer = setInterval(function () {
+      timer = setInterval(() => {
         config.clear(oldX, oldY);
         oldY += 1;
         config.paint(oldX, oldY);
@@ -35,10 +35,7 @@ export class Shape {
     };
 
     this.dragStart = (coordinates) => {
-      console.log('dragStart');
       if (config.onTarget(coordinates.x, coordinates.y, oldX, oldY)) {
-        console.log('draggable trueee');
-
         draggable = true;
       }
     };
