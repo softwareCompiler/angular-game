@@ -4,7 +4,10 @@ import {Subscription} from 'rxjs';
 import {Shape} from './shape';
 
 
-@Directive({selector: '[circle]'})
+// @Directive({selector: '[circle]'})
+// The IDE suggests that circle should be prefixed with the app name, ie, appCircle.
+// Make similar changes to square and other classes/directives.
+@Directive({selector: '[appCircle]'})
 export class CircleDirective {
   private subscription: Subscription;
   private messageService: MessageService;

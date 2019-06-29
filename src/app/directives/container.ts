@@ -4,11 +4,11 @@ export class Container {
   constructor(config) {
     config.paint();
 
-    this.restoreOnMove = () => {
-      config.paint();
-    };
+    // this.restoreOnMove = () => {
+    //   config.paint();
+    // };
 
+    this.restoreOnMove = config.paint;
   }
-
 }
 

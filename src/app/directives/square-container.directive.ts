@@ -34,19 +34,6 @@ export class SquareContainerDirective {
       },
     };
 
-    const ctx = elem.nativeElement.getContext('2d');
-    const canvas = elem.nativeElement;
-    // We don't need any canvas add event listener code.
-    canvas.addEventListener('mousemove', myMove, false);
-    this.messageService = messageService;
-    this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
-      circleScore = payload.circleScore;
-    });
-
-    this.subscription = messageService.subscribe('SquareMouseUpEvent', (payload) => {
-      getScore(payload.x, payload.y);
-    });
-
     config.paint = () => {
       const text = ' ' + config.score;
       const fontHeight = 30;
@@ -68,11 +55,32 @@ export class SquareContainerDirective {
       ctx.fillText(text, textX, textY);
     };
 
+    const ctx = elem.nativeElement.getContext('2d');
+    const canvas = elem.nativeElement;
+
+    // We should NOT have canvas.addEventListener in places other than the mouse tracker class.
+    canvas.addEventListener('mousemove', myMove, false);
+
+    this.messageService = messageService;
+    this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
+      circleScore = payload.circleScore;
+    });
+
+    this.subscription = messageService.subscribe('SquareMouseUpEvent', (payload) => {
+      getScore(payload.x, payload.y);
+    });
+
+
+
+    // this function is not necessary. It can be directly replaced by container.restoreOnMove,
+    // ie, myMove = container.restoreOnMove.
     function myMove(e) {
       container.restoreOnMove();
     }
 
-    const updateScore = function () {
+    // The IDE asks to change the function to use the arrow syntax;
+    // const updateScore = function () {
+      const updateScore = () => {
       const totalScore = circleScore + squareScore;
       document.getElementById('scoreBoard').innerHTML = '' + totalScore;
     };
@@ -93,10 +101,9 @@ export class SquareContainerDirective {
       return sx < config.x + rightBoundaryWidth && sx > config.x - leftBoundaryWidth &&
         sy < config.y + bottomBoundaryHeight && sy > config.y - topBoundaryHeight;
     };
-
     console.log('isOnScoreBoard', isOnScoreBoard);
-
     const container = new Container(config);
+
   }
 
 }
