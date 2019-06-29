@@ -34,11 +34,7 @@ export class SquareDirective {
       return x < oldX + config.width && x > oldX && y < oldY + config.height && y > oldY;
     };
     const shape = new Shape(config);
-
     this.messageService = messageService;
-    this.messageService.subscribe('GameMessage', (payload) => {
-      // add code here to handle end of game.
-    });
     this.messageService.subscribe('mousemove', (payload) => {
       shape.updateOnDrag(payload);
       shape.restoreOnMove();
@@ -48,14 +44,7 @@ export class SquareDirective {
     });
     this.messageService.subscribe('mousedown', shape.dragStart);
 
-
-    // Try to understand one of the most important techniques
-    // for functional programming; passing functions just like primitive values.
     this.messageService.subscribe('TimeOutMessage', shape.endGame);
-    // The 3 lines below are equivalent to the line above.
-    //   this.messageService.subscribe('TimeOutMessage', (payload) => {
-    //   shape.endGame();
-    // });
 
     this.subscription = this.messageService.subscribe('SquareGetScore', shape.onScore);
   }

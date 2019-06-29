@@ -13,15 +13,22 @@ export class MouseTrackerDirective {
     this.messageService = messageService;
     const canvas = elem.nativeElement;
 
-    this.messageService.subscribe('GameMessage', (payload) => {
-      mouseActive();
-    });
+    const mouseActive = () => {
+      canvas.addEventListener('mousemove', mouseMoveListener, false);
+      canvas.addEventListener('mouseup', mouseUpListener, false);
+      canvas.addEventListener('mousedown', mouseDownListener, false);
+    };
 
-    this.messageService.subscribe('TimeOutMessage', (payload) => {
-      console.log('timeout', payload);
-      mouseInactive();
+    const mouseInactive = () => {
+      canvas.removeEventListener('mousemove', mouseMoveListener, false);
+      canvas.removeEventListener('mouseup', mouseUpListener, false);
+      canvas.removeEventListener('mousedown', mouseDownListener, false);
 
-    });
+    };
+
+    this.messageService.subscribe('GameMessage', mouseActive);
+
+    this.messageService.subscribe('TimeOutMessage', mouseInactive);
 
     const mouseMoveListener = e => {
       e.preventDefault();
@@ -44,18 +51,5 @@ export class MouseTrackerDirective {
       messageService.broadcast('mousedown', {x, y});
     };
 
-
-    const mouseActive = () => {
-      canvas.addEventListener('mousemove', mouseMoveListener, false);
-      canvas.addEventListener('mouseup', mouseUpListener, false);
-      canvas.addEventListener('mousedown', mouseDownListener, false);
-    };
-
-    const mouseInactive = () => {
-      canvas.removeEventListener('mousemove', mouseMoveListener, true);
-      canvas.removeEventListener('mouseup', mouseUpListener, true);
-      canvas.removeEventListener('mousedown', mouseDownListener, true);
-
-    };
   }
 }

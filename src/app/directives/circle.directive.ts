@@ -51,12 +51,9 @@ export class CircleDirective {
     });
     this.messageService.subscribe('mousedown', shape.dragStart);
 
-    this.messageService.subscribe('TimeOutMessage', (payload) => {
-      shape.endGame();
-    });
+    this.messageService.subscribe('TimeOutMessage', shape.endGame);
 
-    this.subscription = this.messageService.subscribe('CircleGetScore', (payload) => {
-      shape.onScore();
-    });
+    this.subscription = this.messageService.subscribe('CircleGetScore', shape.onScore);
+
   }
 }

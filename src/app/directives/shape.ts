@@ -25,7 +25,6 @@ export class Shape {
       }, 50);
     };
 
-    // Change two parameters into one parameter to make this function easier to use from outside.
     this.updateOnDrag = (coordinates) => {
       if (draggable) {
         config.clear(oldX, oldY);
