@@ -3,7 +3,7 @@ import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Shape} from './shape';
 
-@Directive({selector: '[square]'})
+@Directive({selector: '[appSquare]'})
 export class SquareDirective {
   private subscription: Subscription;
   private messageService: MessageService;

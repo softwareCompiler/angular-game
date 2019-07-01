@@ -4,7 +4,7 @@ import {Subscription} from 'rxjs';
 import {Container} from './container';
 
 @Directive({
-  selector: '[SquareContainer]'
+  selector: '[appSquareContainer]'
 })
 export class SquareContainerDirective {
   private subscription: Subscription;
@@ -56,12 +56,9 @@ export class SquareContainerDirective {
     };
 
     const ctx = elem.nativeElement.getContext('2d');
-    const canvas = elem.nativeElement;
-
-    // We should NOT have canvas.addEventListener in places other than the mouse tracker class.
-    canvas.addEventListener('mousemove', myMove, false);
-
     this.messageService = messageService;
+    const container = new Container(config);
+    this.messageService.subscribe('mousemove', container.restoreOnMove);
     this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
       circleScore = payload.circleScore;
     });
@@ -70,17 +67,7 @@ export class SquareContainerDirective {
       getScore(payload.x, payload.y);
     });
 
-
-
-    // this function is not necessary. It can be directly replaced by container.restoreOnMove,
-    // ie, myMove = container.restoreOnMove.
-    function myMove(e) {
-      container.restoreOnMove();
-    }
-
-    // The IDE asks to change the function to use the arrow syntax;
-    // const updateScore = function () {
-      const updateScore = () => {
+    const updateScore = () => {
       const totalScore = circleScore + squareScore;
       document.getElementById('scoreBoard').innerHTML = '' + totalScore;
     };
@@ -101,9 +88,6 @@ export class SquareContainerDirective {
       return sx < config.x + rightBoundaryWidth && sx > config.x - leftBoundaryWidth &&
         sy < config.y + bottomBoundaryHeight && sy > config.y - topBoundaryHeight;
     };
-    console.log('isOnScoreBoard', isOnScoreBoard);
-    const container = new Container(config);
-
   }
 
 }

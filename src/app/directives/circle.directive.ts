@@ -3,10 +3,6 @@ import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Shape} from './shape';
 
-
-// @Directive({selector: '[circle]'})
-// The IDE suggests that circle should be prefixed with the app name, ie, appCircle.
-// Make similar changes to square and other classes/directives.
 @Directive({selector: '[appCircle]'})
 export class CircleDirective {
   private subscription: Subscription;
@@ -52,7 +48,7 @@ export class CircleDirective {
     this.messageService.subscribe('mouseup', (payload) => {
       this.messageService.broadcast('CircleMouseUpEvent', payload);
     });
-    this.messageService.subscribe('mousedown', shape.dragStart);
+    this.messageService.subscribeForMouseDownEvent(shape.dragStart);
 
     this.messageService.subscribe('TimeOutMessage', shape.endGame);
 

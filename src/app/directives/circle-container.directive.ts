@@ -3,12 +3,8 @@ import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Container} from './container';
 
-// @Directive({
-//   selector: '[circleContainer]',
-//   providers: []
-// })
 @Directive({
-  selector: '[circleContainer]'
+  selector: '[appCircleContainer]'
 })
 export class CircleContainerDirective {
   private subscription: Subscription;
@@ -32,20 +28,6 @@ export class CircleContainerDirective {
       paint: () => {
       },
     };
-    const ctx = elem.nativeElement.getContext('2d');
-    const canvas = elem.nativeElement;
-    canvas.addEventListener('mousemove', myMove, false);
-
-    this.messageService = messageService;
-    this.subscription = messageService.subscribe('SquareGetScore', (payload) => {
-      squareScore = payload.squareScore;
-    });
-
-    this.subscription = messageService.subscribe('CircleMouseUpEvent', (payload) => {
-      const sx = payload.x;
-      const sy = payload.y;
-      getScore(sx, sy);
-    });
 
     config.paint = () => {
       const text = ' ' + config.score;
@@ -63,9 +45,19 @@ export class CircleContainerDirective {
       ctx.fillText(text, textX, textY);
     };
 
-    function myMove(e) {
-      container.restoreOnMove();
-    }
+    const ctx = elem.nativeElement.getContext('2d');
+    this.messageService = messageService;
+    const container = new Container(config);
+    this.messageService.subscribe('mousemove', container.restoreOnMove);
+    this.subscription = messageService.subscribe('SquareGetScore', (payload) => {
+      squareScore = payload.squareScore;
+    });
+
+    this.subscription = messageService.subscribe('CircleMouseUpEvent', (payload) => {
+      const sx = payload.x;
+      const sy = payload.y;
+      getScore(sx, sy);
+    });
 
     const isOnScoreBoard = (sx, sy) => {
       return Math.sqrt((sx - config.x) * (sx - config.x) + (sy - config.y) * (sy - config.y)) < scoreRadius;
@@ -86,6 +78,5 @@ export class CircleContainerDirective {
         this.messageService.broadcast('CircleGetScore', {isCircleScore, circleScore});
       }
     };
-    const container = new Container(config);
   }
 }
