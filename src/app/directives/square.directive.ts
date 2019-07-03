@@ -33,11 +33,11 @@ export class SquareDirective {
     };
     const shape = new Shape(config);
     this.messageService = messageService;
-    this.messageService.subscribe('mousemove', (payload) => {
+    this.messageService.subscribeForMouseMoveEvent((payload) => {
       shape.updateOnDrag(payload);
       shape.restoreOnMove();
     });
-    this.messageService.subscribe('mouseup', (payload) => {
+    this.messageService.subscribeForMouseUpEvent((payload) => {
       this.messageService.broadcast('SquareMouseUpEvent', payload);
     });
     this.messageService.subscribeForMouseDownEvent(shape.dragStart);

@@ -84,7 +84,7 @@ export class SquareContainerDirective {
       }
     };
 
-    const isOnScoreBoard = function (sx, sy) {
+    const isOnScoreBoard = (sx, sy) => {
       return sx < config.x + rightBoundaryWidth && sx > config.x - leftBoundaryWidth &&
         sy < config.y + bottomBoundaryHeight && sy > config.y - topBoundaryHeight;
     };

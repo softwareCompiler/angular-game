@@ -28,8 +28,15 @@ export class MessageService {
       .subscribe(callback);
   }
 
-  // We should also add similar events for other mouse events. See square.directive.js for an example of how to use this.
   subscribeForMouseDownEvent(callback: MessageCallback): Subscription {
     return this.subscribe('mousedown', callback);
+  }
+
+  subscribeForMouseMoveEvent(callback: MessageCallback): Subscription {
+    return this.subscribe('mousemove', callback);
+  }
+
+  subscribeForMouseUpEvent(callback: MessageCallback): Subscription {
+    return this.subscribe('mouseup', callback);
   }
 }
