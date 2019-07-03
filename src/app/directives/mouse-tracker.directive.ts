@@ -1,12 +1,9 @@
 import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
-import {Subscription} from 'rxjs';
 
-
-@Directive({selector: '[MouseTracker]'})
+@Directive({selector: '[appMouseTracker]'})
 export class MouseTrackerDirective {
 
-  private subscription: Subscription;
   private messageService: MessageService;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
