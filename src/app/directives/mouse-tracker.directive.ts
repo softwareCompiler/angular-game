@@ -10,10 +10,19 @@ export class MouseTrackerDirective {
     this.messageService = messageService;
     const canvas = elem.nativeElement;
 
+    // 20190702: How to further reduce the duplication in this class?
+    const mouseEventListener = e => {
+      console.log('mouseMoveListener ', e.type);
+      e.preventDefault();
+      const x = e.pageX - canvas.offsetLeft;
+      const y = e.pageY - canvas.offsetTop;
+      messageService.broadcast(e.type, {x, y});
+    };
+
     const mouseActive = () => {
-      canvas.addEventListener('mousemove', mouseMoveListener, false);
-      canvas.addEventListener('mouseup', mouseUpListener, false);
-      canvas.addEventListener('mousedown', mouseDownListener, false);
+      canvas.addEventListener('mousemove', mouseEventListener, false);
+      canvas.addEventListener('mouseup', mouseEventListener, false);
+      canvas.addEventListener('mousedown', mouseEventListener, false);
     };
 
     const mouseInactive = () => {
@@ -28,6 +37,7 @@ export class MouseTrackerDirective {
     this.messageService.subscribe('TimeOutMessage', mouseInactive);
 
     const mouseMoveListener = e => {
+      console.log('mouseMoveListener ', e.type);
       e.preventDefault();
       const x = e.pageX - canvas.offsetLeft;
       const y = e.pageY - canvas.offsetTop;
