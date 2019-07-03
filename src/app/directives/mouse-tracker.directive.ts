@@ -1,6 +1,7 @@
 import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 
+import * as R from 'ramda';
 @Directive({selector: '[appMouseTracker]'})
 export class MouseTrackerDirective {
 
@@ -19,10 +20,14 @@ export class MouseTrackerDirective {
       messageService.broadcast(e.type, {x, y});
     };
 
+    const curriedListener = R.curryN(3, canvas.addEventListener);
+    const curriedListenerFn = curriedListener(R.__, mouseEventListener, false);
     const mouseActive = () => {
-      canvas.addEventListener('mousemove', mouseEventListener, false);
-      canvas.addEventListener('mouseup', mouseEventListener, false);
-      canvas.addEventListener('mousedown', mouseEventListener, false);
+      curriedListenerFn('mousemove');
+      curriedListenerFn('mouseup');
+      curriedListenerFn('mousedown');
+      // canvas.addEventListener('mouseup', mouseEventListener, false);
+      // canvas.addEventListener('mousedown', mouseEventListener, false);
     };
 
     const mouseInactive = () => {
