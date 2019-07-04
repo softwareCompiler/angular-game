@@ -33,6 +33,8 @@ export class SquareDirective {
     };
     const shape = new Shape(config);
     this.messageService = messageService;
+    // 20190702: shape.updateOnDrag(payload) and shape.restoreOnMove() are also called in another place: circule.directive.js.
+    // How to remove this duplication?
     this.messageService.subscribeForMouseMoveEvent((payload) => {
       shape.updateOnDrag(payload);
       shape.restoreOnMove();

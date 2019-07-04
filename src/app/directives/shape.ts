@@ -44,6 +44,8 @@ export class Shape {
       config.paint(oldX, oldY);
     };
 
+
+
     this.onScore = () => {
       clearTimer();
       draggable = false;
@@ -58,6 +60,7 @@ export class Shape {
     this.isActive = () => {
       return draggable;
     };
+    // 20190702: This function can be made shorter.
     this.endGame = () => {
       clearTimer();
     };
