@@ -31,9 +31,7 @@ export class SquareDirective {
     };
     const shape = new Shape(config);
     this.messageService = messageService;
-    this.messageService.subscribeForMouseMoveEvent((payload) => {
-      shape.restoreOnMove(payload);
-    });
+    this.messageService.subscribeForMouseMoveEvent(shape.restoreOnMove);
     this.messageService.subscribeForMouseUpEvent((payload) => {
       this.messageService.broadcast('SquareMouseUpEvent', payload);
     });
