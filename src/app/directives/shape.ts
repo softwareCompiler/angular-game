@@ -1,6 +1,7 @@
+import {angularMath} from 'angular-ts-math';
+
 export class Shape {
   autoDrop: any;
-  updateOnDrag: any;
   dragStart: any;
   restoreOnMove: any;
   onScore: any;
@@ -25,12 +26,13 @@ export class Shape {
       }, 50);
     };
 
-    this.updateOnDrag = (coordinates) => {
+    this.restoreOnMove = (coordinates) => {
       if (draggable) {
         config.clear(oldX, oldY);
         config.paint(coordinates.x, coordinates.y);
         oldX = coordinates.x;
         oldY = coordinates.y;
+        config.paint(oldX, oldY);
       }
     };
 
@@ -40,30 +42,23 @@ export class Shape {
       }
     };
 
-    this.restoreOnMove = () => {
-      config.paint(oldX, oldY);
-    };
-
-
-
     this.onScore = () => {
       clearTimer();
       draggable = false;
       oldX = defaultX;
       oldY = defaultY;
       config.paint(oldX, oldY);
-      const randomNumber = Math.random();
+      const randomNumber = angularMath.getRandom();
       if (0 <= randomNumber && randomNumber < 0.5) {
         this.autoDrop();
       }
     };
+
     this.isActive = () => {
       return draggable;
     };
-    // 20190702: This function can be made shorter.
-    this.endGame = () => {
-      clearTimer();
-    };
+
+    this.endGame = () => clearTimer();
 
     const clearTimer = () => {
       if (timer) {

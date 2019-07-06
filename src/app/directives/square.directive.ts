@@ -24,20 +24,15 @@ export class SquareDirective {
       ctx.fillStyle = config.color;
       ctx.fillRect(x, y, config.width, config.height);
     };
-    config.clear = (x, y) => {
-      ctx.clearRect(x, y, config.width, config.height);
-    };
+    config.clear = (x, y) => ctx.clearRect(x, y, config.width, config.height);
 
     config.onTarget = (x, y, oldX, oldY) => {
       return x < oldX + config.width && x > oldX && y < oldY + config.height && y > oldY;
     };
     const shape = new Shape(config);
     this.messageService = messageService;
-    // 20190702: shape.updateOnDrag(payload) and shape.restoreOnMove() are also called in another place: circule.directive.js.
-    // How to remove this duplication?
     this.messageService.subscribeForMouseMoveEvent((payload) => {
-      shape.updateOnDrag(payload);
-      shape.restoreOnMove();
+      shape.restoreOnMove(payload);
     });
     this.messageService.subscribeForMouseUpEvent((payload) => {
       this.messageService.broadcast('SquareMouseUpEvent', payload);

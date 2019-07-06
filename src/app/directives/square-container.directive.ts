@@ -2,6 +2,7 @@ import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Container} from './container';
+import {angularMath} from 'angular-ts-math';
 
 @Directive({
   selector: '[appSquareContainer]'
@@ -28,7 +29,7 @@ export class SquareContainerDirective {
       width: 2 * radiusX,
       height: 3.5 * radiusY,
       startAngle: 0,
-      endAngle: 2 * Math.PI,
+      endAngle: 2 * angularMath.getPi(),
       score: 0,
       paint: () => {
       },

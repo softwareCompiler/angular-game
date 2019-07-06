@@ -2,6 +2,7 @@ import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Container} from './container';
+import {angularMath} from 'angular-ts-math';
 
 @Directive({
   selector: '[appCircleContainer]'
@@ -23,7 +24,7 @@ export class CircleContainerDirective {
       width: 2 * radius,
       height: 2 * radius,
       startAngle: 0,
-      endAngle: 2 * Math.PI,
+      endAngle: 2 * angularMath.getPi(),
       score: 0,
       paint: () => {
       },

@@ -2,6 +2,8 @@ import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Shape} from './shape';
+import {angularMath} from 'angular-ts-math';
+
 
 @Directive({selector: '[appCircle]'})
 export class CircleDirective {
@@ -11,8 +13,7 @@ export class CircleDirective {
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     const radius = 35;
     const startAngle = 0;
-    // 20190702: Webstorm highlights Math in red. Have you tried to solve this?
-    const endAngle = 2 * Math.PI;
+    const endAngle = 2 * angularMath.getPi();
     const config = {
       width: 2 * radius,
       height: 2 * radius,
@@ -32,20 +33,17 @@ export class CircleDirective {
       ctx.fill();
     };
 
-    config.clear = (x, y) => {
-      ctx.clearRect(x - radius, y - radius, config.width, config.height);
-    };
+    config.clear = (x, y) => ctx.clearRect(x - radius, y - radius, config.width, config.height);
 
     config.onTarget = (x, y, oldX, oldY) => {
-      return Math.sqrt((x - oldX) * (x - oldX) + (y - oldY) * (y - oldY)) <= radius;
+      return angularMath.squareOfNumber((x - oldX) * (x - oldX) + (y - oldY) * (y - oldY)) <= radius;
     };
 
     const shape = new Shape(config);
     this.messageService = messageService;
 
     this.messageService.subscribeForMouseMoveEvent((payload) => {
-      shape.updateOnDrag(payload);
-      shape.restoreOnMove();
+      shape.restoreOnMove(payload);
     });
     this.messageService.subscribeForMouseUpEvent((payload) => {
       this.messageService.broadcast('CircleMouseUpEvent', payload);
