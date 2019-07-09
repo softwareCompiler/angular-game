@@ -7,6 +7,7 @@ import * as R from 'ramda';
 @Directive({selector: '[appMouseTracker]'})
 export class MouseTrackerDirective {
 
+  private messageService;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     this.messageService = messageService;
