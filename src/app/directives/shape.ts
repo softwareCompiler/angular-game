@@ -36,7 +36,7 @@ export class Shape {
       }
     };
 
-    this.dragStart = (coordinates) => {
+    this.dragStart = coordinates => {
       if (config.onTarget(coordinates.x, coordinates.y, oldX, oldY)) {
         draggable = true;
       }

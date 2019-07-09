@@ -2,6 +2,7 @@ import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Container} from './container';
+// angular-ts-math is not found
 import {angularMath} from 'angular-ts-math';
 
 @Directive({
@@ -21,6 +22,7 @@ export class SquareContainerDirective {
     const bottomBoundaryHeight = 10;
     const rotation = 0;
     let squareScore = 0;
+    // We should NOT care about circleScore in the square container. We should delete this local variable and move the logic to the right place.
     let circleScore = 0;
     let isSquareScore = false;
     const config = {
@@ -60,6 +62,7 @@ export class SquareContainerDirective {
     this.messageService = messageService;
     const container = new Container(config);
     this.messageService.subscribe('mousemove', container.restoreOnMove);
+    // This subscription does not make sense.
     this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
       circleScore = payload.circleScore;
     });
