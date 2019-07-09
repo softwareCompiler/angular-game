@@ -56,6 +56,19 @@ export class CircleContainerDirective {
       squareScore = payload.squareScore;
     });
 
+    const getScore = payload => {
+      const [sx, sy] = payload;
+      if (isOnScoreBoard(sx, sy)) {
+        isCircleScore = true;
+        config.score += 1;
+        ctx.clearRect(config.x - radius, config.y - radius, config.width, config.height);
+        config.paint();
+        circleScore = config.score;
+        updateScore();
+        this.messageService.broadcast('CircleGetScore', {isCircleScore, circleScore});
+      }
+    };
+
     this.subscription = messageService.subscribe('CircleMouseUpEvent', getScore);
 
     const isOnScoreBoard = (sx, sy) => {
@@ -80,17 +93,5 @@ export class CircleContainerDirective {
     //     this.messageService.broadcast('SquareGetScore', {isSquareScore, squareScore});
     //   }
     // };
-    const getScore = payload => {
-      const [sx, sy] = payload;
-      if (isOnScoreBoard(sx, sy)) {
-        isCircleScore = true;
-        config.score += 1;
-        ctx.clearRect(config.x - radius, config.y - radius, config.width, config.height);
-        config.paint();
-        circleScore = config.score;
-        updateScore();
-        this.messageService.broadcast('CircleGetScore', {isCircleScore, circleScore});
-      }
-    };
   }
 }
