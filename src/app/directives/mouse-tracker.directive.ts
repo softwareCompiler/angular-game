@@ -7,11 +7,11 @@ import * as R from 'ramda';
 @Directive({selector: '[appMouseTracker]'})
 export class MouseTrackerDirective {
 
-  private messageService: MessageService;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     this.messageService = messageService;
     const canvas = elem.nativeElement;
+    const mouseEvents = ['mousemove', 'mouseup', 'mousedown'];
 
     const mouseEventListener = e => {
       console.log('mouseMoveListener ', e.type);
@@ -24,9 +24,7 @@ export class MouseTrackerDirective {
     const curriedListener = R.curryN(3, canvas.addEventListener);
     const curriedListenerFn = curriedListener(R.__, mouseEventListener, false);
     const mouseActive = () => {
-      curriedListenerFn('mousemove');
-      curriedListenerFn('mouseup');
-      curriedListenerFn('mousedown');
+      mouseEvents.forEach(curriedListenerFn);
     };
 
     const curriedRemoveListener = R.curryN(3, canvas.removeEventListener);
