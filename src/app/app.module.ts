@@ -1,6 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-
 import {AppComponent} from './app.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
@@ -14,6 +13,7 @@ import {SquareContainerDirective} from './directives/square-container.directive'
 import {SquareDirective} from './directives/square.directive';
 import {CircleDirective} from './directives/circle.directive';
 import {MouseTrackerDirective} from './directives/mouse-tracker.directive';
+import {ScoreBoardDirective} from './directives/score-board.directive';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,8 @@ import {MouseTrackerDirective} from './directives/mouse-tracker.directive';
     SquareContainerDirective,
     SquareDirective,
     CircleDirective,
-    MouseTrackerDirective
+    MouseTrackerDirective,
+    ScoreBoardDirective
   ],
   imports: [
     BrowserModule,

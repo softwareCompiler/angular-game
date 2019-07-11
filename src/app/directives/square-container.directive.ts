@@ -2,7 +2,6 @@ import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Container} from './container';
-// angular-ts-math is not found
 import {angularMath} from 'angular-ts-math';
 
 @Directive({
@@ -22,8 +21,6 @@ export class SquareContainerDirective {
     const bottomBoundaryHeight = 10;
     const rotation = 0;
     let squareScore = 0;
-    // We should NOT care about circleScore in the square container. We should delete this local variable and move the logic to the right place.
-    let circleScore = 0;
     let isSquareScore = false;
     const config = {
       x: 200,
@@ -62,19 +59,10 @@ export class SquareContainerDirective {
     this.messageService = messageService;
     const container = new Container(config);
     this.messageService.subscribe('mousemove', container.restoreOnMove);
-    // This subscription does not make sense.
-    this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
-      circleScore = payload.circleScore;
-    });
 
     this.subscription = messageService.subscribe('SquareMouseUpEvent', (payload) => {
       getScore(payload.x, payload.y);
     });
-
-    const updateScore = () => {
-      const totalScore = circleScore + squareScore;
-      document.getElementById('scoreBoard').innerHTML = '' + totalScore;
-    };
 
     const getScore = (sx, sy) => {
       if (isOnScoreBoard(sx, sy)) {
@@ -83,7 +71,6 @@ export class SquareContainerDirective {
         ctx.clearRect(config.x - radiusX, config.y - radiusY, config.width, config.height);
         config.paint();
         squareScore = config.score;
-        updateScore();
         this.messageService.broadcast('SquareGetScore', {isSquareScore, squareScore});
       }
     };

@@ -2,7 +2,6 @@ import {Directive, ElementRef, Renderer2} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
 import {Subscription} from 'rxjs';
 import {Container} from './container';
-// angular-ts-math is not found
 import {angularMath} from 'angular-ts-math';
 
 @Directive({
@@ -16,7 +15,6 @@ export class CircleContainerDirective {
     const radius = 50;
     const scoreRadius = 10;
     let circleScore = 0;
-    let squareScore = 0;
     let isCircleScore = false;
 
     const config = {
@@ -52,33 +50,49 @@ export class CircleContainerDirective {
     const container = new Container(config);
     this.messageService.subscribe('mousemove', container.restoreOnMove);
     // Why in the circle container we need to subscribe to 'SquareGetScore' event?
-    this.subscription = messageService.subscribe('SquareGetScore', (payload) => {
-      squareScore = payload.squareScore;
+    // this.subscription = messageService.subscribe('SquareGetScore', (payload) => {
+    //   squareScore = payload.squareScore;
+    // });
+    this.subscription = messageService.subscribe('CircleMouseUpEvent', (payload) => {
+      getScore(payload.x, payload.y);
     });
 
-    const getScore = payload => {
-      const [sx, sy] = payload;
+    const getScore = (sx, sy) => {
+      // const [sx, sy] = payload;
       if (isOnScoreBoard(sx, sy)) {
         isCircleScore = true;
         config.score += 1;
         ctx.clearRect(config.x - radius, config.y - radius, config.width, config.height);
         config.paint();
         circleScore = config.score;
-        updateScore();
+        // updateScore();
         this.messageService.broadcast('CircleGetScore', {isCircleScore, circleScore});
       }
     };
 
-    this.subscription = messageService.subscribe('CircleMouseUpEvent', getScore);
+    // const getScore = payload => {
+    //   const [sx, sy] = payload;
+    //   if (isOnScoreBoard(sx, sy)) {
+    //     isCircleScore = true;
+    //     config.score += 1;
+    //     ctx.clearRect(config.x - radius, config.y - radius, config.width, config.height);
+    //     config.paint();
+    //     circleScore = config.score;
+    //     // updateScore();
+    //     this.messageService.broadcast('CircleGetScore', {isCircleScore, circleScore});
+    //   }
+    // };
+
+    // this.subscription = messageService.subscribe('CircleMouseUpEvent', getScore);
 
     const isOnScoreBoard = (sx, sy) => {
-      return Math.sqrt((sx - config.x) * (sx - config.x) + (sy - config.y) * (sy - config.y)) < scoreRadius;
+      return angularMath.squareOfNumber((sx - config.x) * (sx - config.x) + (sy - config.y) * (sy - config.y)) < scoreRadius;
     };
 
-    const updateScore = () => {
-      const totalScore = circleScore + squareScore;
-      document.getElementById('scoreBoard').innerHTML = '' + totalScore;
-    };
+    // const updateScore = () => {
+    //   const totalScore = circleScore + squareScore;
+    //   document.getElementById('scoreBoard').innerHTML = '' + totalScore;
+    // };
 
     // This is the getScore function defined in square-container.directive.ts. It's so similar to the getScore function
     // in this class. Can we reuse the similar logic to avoid duplication?
