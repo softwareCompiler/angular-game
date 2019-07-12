@@ -57,6 +57,8 @@ export class CircleContainerDirective {
       getScore(payload.x, payload.y);
     });
 
+    // 20190711: This version of getScore takes two parameters. If we change it to use one parameter, this function will be easier to be passed as a
+    // parameter to another function.
     const getScore = (sx, sy) => {
       // const [sx, sy] = payload;
       if (isOnScoreBoard(sx, sy)) {
