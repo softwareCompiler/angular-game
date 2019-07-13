@@ -9,7 +9,6 @@ export class ScoreBoardDirective {
   private subscription: Subscription;
 
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
-    const ctx = elem.nativeElement.getContext('2d');
     let circleScore = 0;
     let squareScore = 0;
     this.subscription = messageService.subscribe('SquareGetScore', (payload) => {

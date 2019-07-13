@@ -33,9 +33,6 @@ export class MouseTrackerDirective {
 
     const mouseInactive = () => {
       mouseEvents.forEach(curriedRemoveListenerFn);
-      // curriedRemoveListenerFn('mousemove');
-      // curriedRemoveListenerFn('mouseup');
-      // curriedRemoveListenerFn('mousedown');
     };
 
     this.messageService.subscribe('GameMessage', mouseActive);

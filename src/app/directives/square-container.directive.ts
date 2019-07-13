@@ -60,12 +60,8 @@ export class SquareContainerDirective {
     const container = new Container(config);
     this.messageService.subscribe('mousemove', container.restoreOnMove);
 
-    this.subscription = messageService.subscribe('SquareMouseUpEvent', (payload) => {
-      getScore(payload.x, payload.y);
-    });
-
-    const getScore = (sx, sy) => {
-      if (isOnScoreBoard(sx, sy)) {
+    const getScore = (coordinates) => {
+      if (isOnScoreBoard(coordinates.x, coordinates.y)) {
         isSquareScore = true;
         config.score += 1;
         ctx.clearRect(config.x - radiusX, config.y - radiusY, config.width, config.height);
@@ -74,6 +70,8 @@ export class SquareContainerDirective {
         this.messageService.broadcast('SquareGetScore', {isSquareScore, squareScore});
       }
     };
+
+    this.subscription = messageService.subscribe('SquareMouseUpEvent', getScore);
 
     const isOnScoreBoard = (sx, sy) => {
       return sx < config.x + rightBoundaryWidth && sx > config.x - leftBoundaryWidth &&

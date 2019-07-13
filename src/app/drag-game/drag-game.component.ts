@@ -1,5 +1,6 @@
 import {Component, ElementRef, OnInit} from '@angular/core';
 import {MessageService} from '../services/directive-messaging';
+import {angularMath} from 'angular-ts-math';
 
 @Component({
   selector: 'app-drag-game',
@@ -12,19 +13,18 @@ export class DragGameComponent {
   }
 
   startTimer = (duration, display) => {
-    let start = Date.now();
+    const start = Date.now();
     let diff;
     let minutes;
     let seconds;
     const mileSecondFactor = 1000;
     const secondFactor = 60;
     const minutesFactor = 60;
-    console.log('publish this.messageService 000 ...', this.messageService);
     this.messageService.broadcast('GameMessage', {});
     const timer = () => {
       const gameRuning = false;
       diff = duration - (((Date.now() - start) / mileSecondFactor) | 0);
-      minutes = Math.floor(diff / minutesFactor);
+      minutes = angularMath.backIntegerOfNumber(diff / minutesFactor);
       seconds = (diff % secondFactor) | 0;
       minutes = minutes < 10 ? '0' + minutes : minutes;
       seconds = seconds < 10 ? '0' + seconds : seconds;
