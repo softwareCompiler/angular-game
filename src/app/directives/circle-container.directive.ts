@@ -14,9 +14,6 @@ export class CircleContainerDirective {
   constructor(elem: ElementRef, renderer: Renderer2, messageService: MessageService) {
     const radius = 50;
     const scoreRadius = 10;
-    // let circleScore = 0;
-    // let isCircleScore = false;
-
     const config = {
       x: 450,
       y: 370,
@@ -53,14 +50,8 @@ export class CircleContainerDirective {
 
     const getScore = (coordinates) => {
       if (isOnScoreBoard(coordinates.x, coordinates.y)) {
-        // isCircleScore = true;
         config.score += 1;
         ctx.clearRect(config.x - radius, config.y - radius, config.width, config.height);
-        // config.paint();
-        // circleScore = config.score;
-        // The variable, isCircleScore, is NOT necessary because we are already using the name of the event, CircleGetScore.
-        // this.messageService.broadcast('CircleGetScore', {isCircleScore, circleScore});
-        // Make similar changes in square-container.directive.js
         this.messageService.broadcast('CircleGetScore', config.score);
       }
     };

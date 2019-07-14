@@ -12,11 +12,11 @@ export class ScoreBoardDirective {
     let circleScore = 0;
     let squareScore = 0;
     this.subscription = messageService.subscribe('SquareGetScore', (payload) => {
-      squareScore = payload.squareScore;
+      squareScore = payload;
       updateScore();
     });
     this.subscription = messageService.subscribe('CircleGetScore', (payload) => {
-      circleScore = payload.circleScore;
+      circleScore = payload;
       updateScore();
     });
     const updateScore = () => {

@@ -20,8 +20,6 @@ export class SquareContainerDirective {
     const topBoundaryHeight = 20;
     const bottomBoundaryHeight = 10;
     const rotation = 0;
-    let squareScore = 0;
-    let isSquareScore = false;
     const config = {
       x: 200,
       y: 350,
@@ -62,12 +60,9 @@ export class SquareContainerDirective {
 
     const getScore = (coordinates) => {
       if (isOnScoreBoard(coordinates.x, coordinates.y)) {
-        isSquareScore = true;
         config.score += 1;
         ctx.clearRect(config.x - radiusX, config.y - radiusY, config.width, config.height);
-        config.paint();
-        squareScore = config.score;
-        this.messageService.broadcast('SquareGetScore', {isSquareScore, squareScore});
+        this.messageService.broadcast('SquareGetScore', config.score);
       }
     };
 
